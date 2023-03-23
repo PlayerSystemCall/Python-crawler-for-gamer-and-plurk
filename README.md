@@ -3,8 +3,8 @@
  Get the data from account homepages of Gamer(巴哈姆特) and Plurk(噗浪) and then write it into Google Sheets.   
 ## 版本分支圖 Version Branch Map
  study_web_data_ver0.py  
- ├副程式Subprogram
- │└Python_crawler_subprogram_ver1.py
+ ├副程式Subprogram  
+ │└Python_crawler_subprogram_ver1.py  
  ├巴哈姆特Gamer (an operating social networking site)  
  │├study_gamer_data_ver1.py  
  │└study_gamer_data_ver2.py=c.n.=>**Python_crawler_for_gamer_ver2.py**  
