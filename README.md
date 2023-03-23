@@ -8,7 +8,7 @@
  ├巴哈姆特Gamer (an operating social networking site)  
  │├study_gamer_data_ver1.py  
  │├study_gamer_data_ver2.py=c.n.=>**Python_crawler_for_gamer_ver2.py**  
- │└Python_crawler_mainprogram_for_gamer_ver3.py
+ │└Python_crawler_mainprogram_for_gamer_ver3.py  
  ├噗浪Plurk (a working social networking site)  
  │├study_plurk_data_ver1.py  
  │├study_plurk_data_ver2.py  
@@ -17,6 +17,6 @@
  └探路克Timelog (a closed social networking site)  
  　└No_file  
  
- Note 1: change name---->c.n.  
+ Note 1: change name==>c.n.  
  Note 2: **file.py** is mean the run-time version of file of python crawler  
  Note 3: If some code can do the repetitive work, create a file to put it. Import it when program needs to use the code of the file. 
