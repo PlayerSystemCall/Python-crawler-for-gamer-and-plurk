@@ -13,7 +13,7 @@
  │├study_plurk_data_ver1.py  
  │├study_plurk_data_ver2.py  
  │├study_plurk_data_ver3.py=c.n.=>**Python_crawler_for_plurk_ver3.py**  
- │└Python_crawler_mainprogram_for_plurk_ver4.py
+ │└Python_crawler_mainprogram_for_plurk_ver4.py  
  └探路克Timelog (a closed social networking site)  
  　└No_file  
  
