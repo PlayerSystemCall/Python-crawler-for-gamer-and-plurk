@@ -7,7 +7,7 @@
  │└Python_crawler_subprogram_ver1.py  
  ├巴哈姆特Gamer (an operating social networking site)  
  │├study_gamer_data_ver1.py  
- │└study_gamer_data_ver2.py=c.n.=>**Python_crawler_for_gamer_ver2.py**  
+ │├study_gamer_data_ver2.py=c.n.=>**Python_crawler_for_gamer_ver2.py**  
  │└Python_crawler_mainprogram_for_gamer_ver3.py
  ├噗浪Plurk (a working social networking site)  
  │├study_plurk_data_ver1.py  
