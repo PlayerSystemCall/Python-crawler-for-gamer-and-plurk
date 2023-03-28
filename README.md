@@ -20,3 +20,5 @@
  Note 1: change name==>c.n.  
  Note 2: **file.py** is mean the run-time version of file of python crawler  
  Note 3: If some code can do the repetitive work, create a file to put it. Import it when program needs to use the code of the file. 
+## Note of this Project
+ 1: The version 2.0.6 of pygsheet sisn't using.   
