@@ -5,15 +5,16 @@ import requests
 import pygsheets
 from lxml import etree
 from datetime import datetime, timedelta
+from Player_SystemCall_account import gamer_account as gamer_account
 
 def TWtime(): #獲取台灣時間
     import pytz
     import ntplib
     timeserver = ["ntp.ntu.edu.tw", "tw.pool.ntp.org", "time.stdtime.gov.tw", "tock.stdtime.gov.tw", "watch.stdtime.gov.tw", "clock.stdtime.gov.tw", "tick.stdtime.gov.tw", "118.163.81.61", "time.windows.com", "time.google.com"] #時間伺服器網址串列
     server_number = 0 #時間伺服器網址編號(0~9)
-    state = 0 #設定狀態碼為0
+    status = 0 #設定狀態碼為0
     try:
-        while server_number < 10 and state != 1: #在透過NTP獲取時間超過10次或狀態碼等於1時，結束迴圈
+        while server_number < 10 and status != 1: #在透過NTP獲取時間超過10次或狀態碼等於1時，結束迴圈
             NTPClient = ntplib.NTPClient() #啟用NTP客戶端
             try:
                 NTPServer = NTPClient.request(timeserver[server_number]) #連結NTP伺服器
@@ -25,7 +26,7 @@ def TWtime(): #獲取台灣時間
                 ad_year_yesterday = str((Taipeitime+timedelta(days=-1)).year)+"年" #昨天台北時區的西元紀年
                 mg_year_yesterday = str((Taipeitime+timedelta(days=-1)).year-1911)+"年" #昨天台北時區的民國紀年
                 date_yesterday = str((Taipeitime+timedelta(days=-1)).month)+"月"+str((Taipeitime+timedelta(days=-1)).day)+"日" #昨天台北時區的西元日期
-                state = 1 #設定狀態碼為1
+                status = 1 #設定狀態碼為1
             except BaseException: #如果上面執行失敗，執行此區
                 server_number = server_number+1 #時間伺服器網址編號加1
         timeserver_link = timeserver[server_number] #時間伺服器網址
@@ -196,7 +197,7 @@ except:
 
 try:
     #取得巴哈小屋網頁原始碼，找到資料的的html區塊，取出資料
-    gamer_url = "https://home.gamer.com.tw/homeindex.php?owner=player0309" #巴哈小屋網址
+    gamer_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(gamer_account["user_id"]) #巴哈小屋網址
     gamer_statuscode = go_to_web(gamer_url) #回傳網路狀態碼
     headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19577"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
     Go_to_gamer = requests.get(gamer_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對gamer_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
@@ -232,7 +233,7 @@ gamer_data_get = {"follower" : {}, "friend" : {}, "other" : {}} #建立字典，
 
 try:
     #取得巴哈追蹤者名單網頁原始碼，找到資料的的html區塊，取出資料
-    gamer_followerlist_url = "https://home.gamer.com.tw/friendList.php?user=player0309&t=4" #巴哈追蹤者列表網址
+    gamer_followerlist_url = "https://home.gamer.com.tw/friendList.php?user={}&t=4".format(gamer_account["user_id"]) #巴哈追蹤者列表網址
     gamer_followerlist_statuscode = go_to_web(gamer_followerlist_url) #回傳網路狀態碼
     headers = {"User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
     Go_to_gamer_followerlist = requests.get(gamer_followerlist_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對gamer_follower_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
@@ -295,7 +296,7 @@ except:
 
 try:
     #取得巴哈朋友名單網頁原始碼，找到資料的的html區塊，取出資料
-    gamer_friendlist_url = "https://home.gamer.com.tw/friendList.php?user=player0309&t=1" #巴哈好友列表網址
+    gamer_friendlist_url = "https://home.gamer.com.tw/friendList.php?user={}&t=1".format(gamer_account["user_id"]) #巴哈好友列表網址
     gamer_friendlist_statuscode = go_to_web(gamer_friendlist_url) #回傳網路狀態碼
     headers = {"User-Agent" : "Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
     Go_to_gamer_friendlist = requests.get(gamer_friendlist_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對gamerfriend_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
@@ -360,7 +361,7 @@ except:
 
 try:
     #開啟試算表
-    certificate = pygsheets.authorize(service_file='.\pelagic-radio-361715.json') #取得位置在同層級目錄的Google sheets API憑證
+    certificate = pygsheets.authorize(service_file='.\google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
     googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
     open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
     open_googlesheets_status = True
