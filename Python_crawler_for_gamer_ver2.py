@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
 import socket
-import js2xml
 import requests
 import pygsheets
 from lxml import etree
@@ -54,7 +54,7 @@ def go_to_web(web_URL): #測試網路連結的狀態
             time.sleep(30) #停頓30秒
             web_testtime = web_testtime + 1 #測試網路連線的次數加1
         else: #等於200
-            Go_to_web.status_code = web_status
+            web_status = Go_to_web.status_code
             web_testtime = web_testtime + 1 #測試網路連線的次數加1
         Go_to_web.close() #關閉對web_URL夾帶headers發出GET請求
         if web_status == 200 or web_testtime == 3: #如果網路正常或是測試網路連線3次
@@ -62,8 +62,8 @@ def go_to_web(web_URL): #測試網路連結的狀態
         else:
             return web_status #回傳程式調整的網路狀態碼
 
-def get_followday(number, start_time, i, state, startfollowdate, followday, string, endfollowdate, worksheet): #取得追蹤天數
-    if state == "old": #如果狀態為old(老追蹤者)
+def get_followday(number, start_time, i, status, startfollowdate, followday, string, endfollowdate, worksheet): #取得追蹤天數
+    if status == "old": #如果狀態為old(老追蹤者)
         try:
             startfollowdate = datetime.strptime(startfollowdate, "%Y-%m-%d %H:%M:%S") #將開始追蹤時間轉成datetime格式
             today_date = datetime.strptime(str(start_time).split(".")[0], "%Y-%m-%d %H:%M:%S") #將程式開始執行的時間start_time取出年月日
@@ -100,9 +100,9 @@ def lastday_of_month(year, month): #取得該年該月最後一天
 def get_nic_data(): #取得正在使用的網路卡資料
     import psutil
     nic_list = psutil.net_if_addrs() #取得網路連線清單
-    nic_list_state = psutil.net_if_stats() #取得網路連線狀態清單
+    nic_list_status = psutil.net_if_stats() #取得網路連線狀態清單
     for nic in nic_list: #取出其中一個網路
-        if (nic_list_state[nic].isup == True) & (len(nic_list[nic]) == 3): #如果該網路正在連線和不是Loopback Pseudo-Interface 1
+        if (nic_list_status[nic].isup == True) & (len(nic_list[nic]) == 3): #如果該網路正在連線和不是Loopback Pseudo-Interface 1
             nic_data = [nic, {"mac" : nic_list[nic][0].address,"ipv4" : nic_list[nic][1].address, "ipv6" : nic_list[nic][2].address}] #獲取該網路資訊
     return nic_data[0], nic_data[1] #回傳網路名稱(非SSID)和其mac、ipv4和ipv6
 
@@ -118,17 +118,17 @@ def get_ip(): #取得網際網路(外網)IP
     import json
     get_ip_link = ["http://httpbin.org/ip", "https://ifconfig.me/ip"] #查詢IP網址串列
     i = 0 #IP網址串列順序
-    state = 0 #取得IP的狀態碼
-    while i < 2 and state != 1: #當順序小於2和狀態碼等於0時，持續運作
+    status = 0 #取得IP的狀態碼
+    while i < 2 and status != 1: #當順序小於2和狀態碼等於0時，持續運作
         try:
             headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19577"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
             go_to_url = requests.get(get_ip_link[i], headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對get_ip_link[i]的網址夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能
             if i == 0: #依據網址原始碼做相對應資訊之取出
                 ip = json.loads(go_to_url.text)["origin"] #將字串變成python的字典再取出相對的值
-                state = 1
+                status = 1
             if i == 1: #依據網址原始碼做相對應資訊之取出
                 ip = go_to_url.text #直接取出值
-                state = 1
+                status = 1
             go_to_url.close() #關閉與get_ip_link[i]之網址的連結
         except:
             i = i+1 #順序加1
@@ -208,15 +208,12 @@ try:
         #小屋/小屋統計/圖表資料
         xpath_on_web = "//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/div[@class='BH-rbox MSG-list1']/script/text()" #text()在網頁程式碼的位置(Xpath表達式)
         jscode_on_web = gamer_sourcecode.xpath(xpath_on_web)[0] #使用Xpath表達式提出，為results_on_web
-        jscode_to_xml = js2xml.parse(str(jscode_on_web), encoding='utf-8', debug=False) #將jscode_on_web轉成字串再轉換成xml標記的文本
-        xpath_on_jsxml = "//program/functioncall/arguments/funcexpr/body/functioncall/arguments/funcexpr/body/var[@name='visitData']/object/property[@name='point']/array/string/text()" #text()在網頁程式碼的位置(Xpath表達式)
-        gamer_viewnumbers_on_jsxml = list(map(int, jscode_to_xml.xpath(xpath_on_jsxml))) #使用Xpath表達式提出，為gamer_viewnumbers_on_jsxml串列
-        xpath_on_jsxml = "//program/functioncall/arguments/funcexpr/body/functioncall/arguments/funcexpr/body/var[@name='visitData']/object/property[@name='xstr']/array/string/text()" #text()在網頁程式碼的位置(Xpath表達式)
-        gamer_dates_on_jsxml = list(map(str, jscode_to_xml.xpath(xpath_on_jsxml))) #使用Xpath表達式提出，為gamer_dates_on_jsxml串列
-        number = 0 #編號
-        for i in gamer_dates_on_jsxml: #將7個日期全部由字串轉成datetime格式
-            gamer_dates_on_jsxml[number] = datetime.strptime(i, "%Y/%m/%d")
-            number = number+1
+        gamer_viewnumbers = re.findall('"\d\d"', jscode_on_web) #使用正則表達式提出，為gamer_viewnumbers串列
+        for i in range(len(gamer_viewnumbers)):
+            gamer_viewnumbers[i] = re.findall("\d\d", gamer_viewnumbers[i])[0]
+        gamer_dates = re.findall("\d\d\d\d..\d\d..\d\d", jscode_on_web)
+        for i in range(len(gamer_dates)): #將7個日期全部由字串轉成datetime格式
+            gamer_dates[i] = datetime.strptime(gamer_dates[i], "%Y\/%m\/%d")
         #小屋/小屋統計/好友圈人數
         xpath_on_web = "//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/div[@class='BH-rbox MSG-list1']/ul/li[5]/text()" #text()在網頁程式碼的位置(Xpath表達式)
         gamer_friend_number = int(gamer_sourcecode.xpath(xpath_on_web)[0][4:]) #指定第1個元素的第5個元素之後的字串，並數字化 #取得好友人數
@@ -365,8 +362,10 @@ try:
     googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
     open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
     open_googlesheets_status = True
+    print("open_googlesheets_status", open_googlesheets_status)
 except:
     open_googlesheets_status = False
+    print("open_googlesheets_status", open_googlesheets_status)
 
 if open_googlesheets_status == True:
     try:
@@ -382,8 +381,10 @@ if open_googlesheets_status == True:
         
         runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
         basic_status = True
+        print("basic_status", basic_status)
     except:
         basic_status = False
+        print("basic_status", basic_status)
     
     if basic_status == True:
         try: #寫入試算表1："人氣紀錄"
@@ -408,10 +409,10 @@ if open_googlesheets_status == True:
                 worksheet.update_value("A{}".format(writesit), ad_year_today) #寫入今日的西元紀年
                 worksheet.update_value("B{}".format(writesit), mg_year_today) #寫入今日的民國紀年
                 worksheet.update_value("C{}".format(writesit), date_today) #寫入今日的日期
-            if str(datetime.strptime(worksheet.get_value("A{}".format(gamer_writesit))+worksheet.get_value("C{}".format(gamer_writesit)), "%Y年%m月%d日")) == str(gamer_dates_on_jsxml[6]): #如果試算表上所寫的「昨天的日期」等於「ad_year+date_yesterday」
+            if str(datetime.strptime(worksheet.get_value("A{}".format(gamer_writesit))+worksheet.get_value("C{}".format(gamer_writesit)), "%Y年%m月%d日")) == str(gamer_dates[6]): #如果試算表上所寫的「昨天的日期」等於「ad_year+date_yesterday」
                 worksheet.update_value("D{}".format(gamer_writesit), gamer_friend_number) #寫入巴哈好友圈人數
                 worksheet.update_value("E{}".format(gamer_writesit), gamer_follower_number) #寫入巴哈追蹤者人數
-                worksheet.update_value("F{}".format(gamer_writesit), gamer_viewnumbers_on_jsxml[6]) #寫入巴哈當日人氣數
+                worksheet.update_value("F{}".format(gamer_writesit), gamer_viewnumbers[6]) #寫入巴哈當日人氣數
                 worksheet.update_value("G{}".format(gamer_writesit), gamer_yesterday_allview) #寫入巴哈總人氣數
                 if (gamer_writesit > (lastday_of_month(int(ad_year_yesterday.split("年")[0]), int(worksheet.get_value("C{}".format(gamer_writesit)).split("月")[0]))-1)) and (int(worksheet.get_value("C{}".format(gamer_writesit)).split("月")[1].split("日")[0]) == month_lastday): #如果試算表日期等於月的最後一天
                     worksheet.update_values("H{}".format(gamer_writesit-3), [["本月總和"], ["=SUM(F{}:F{})".format(gamer_writesit+1-(lastday_of_month(int(worksheet.get_value("A{}".format(gamer_writesit)).split("年")[0]), int(worksheet.get_value("C{}".format(gamer_writesit)).split("月")[0]))), gamer_writesit)], ["本月日平均"], ["=AVERAGE(F{}:F{})".format(gamer_writesit+1-(lastday_of_month(int(worksheet.get_value("A{}".format(gamer_writesit)).split("年")[0]), int(worksheet.get_value("C{}".format(gamer_writesit)).split("月")[0]))), gamer_writesit)]]) #寫入本月總和和日平均
@@ -484,7 +485,7 @@ if open_googlesheets_status == True:
                         gamer_data_new["follower"][gamer_follower_number_new]["regdate"] = gamer_data_get["follower"][i]["regdate"]
                         gamer_data_new["follower"][gamer_follower_number_new]["lastondate"] = gamer_data_get["follower"][i]["lastondate"]
                         gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"] = gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                        gamer_data_new["follower"][gamer_follower_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["follower"][gamer_follower_number_new]["state"], gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"], gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["followday"], gamer_follower_string, 0, worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        gamer_data_new["follower"][gamer_follower_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["follower"][gamer_follower_number_new]["status"], gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"], gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["followday"], gamer_follower_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = "" #結束時間為空白
                         gamer_follower_number_new = gamer_follower_number_new+1
                     else:
@@ -524,7 +525,7 @@ if open_googlesheets_status == True:
                             gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
                         else: #如果日期不等於空白
                             gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["fan"][gamer_follower_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                        gamer_data_new["follower"][gamer_follower_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["follower"][gamer_follower_number_new]["state"], gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"], gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["followday"], gamer_follower_string, gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        gamer_data_new["follower"][gamer_follower_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["follower"][gamer_follower_number_new]["status"], gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"], gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["followday"], gamer_follower_string, gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         gamer_follower_number_new = gamer_follower_number_new+1
                     else:
                         del gamer_data_new["follower"][gamer_follower_number_new] #如果從巴哈取得的追蹤者account的值沒有在串列裡，刪除以gamer_follower_number_new為名的鍵
@@ -543,7 +544,7 @@ if open_googlesheets_status == True:
                         gamer_data_new["friend"][gamer_friend_number_new]["regdate"] = gamer_data_get["friend"][i]["regdate"]
                         gamer_data_new["friend"][gamer_friend_number_new]["lastondate"] = gamer_data_get["friend"][i]["lastondate"]
                         gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"] = gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                        gamer_data_new["friend"][gamer_friend_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["friend"][gamer_friend_number_new]["state"], gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"], gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["followday"], gamer_friend_string, 0, worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        gamer_data_new["friend"][gamer_friend_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["friend"][gamer_friend_number_new]["status"], gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"], gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["followday"], gamer_friend_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] = "" #結束時間為空白
                         gamer_friend_number_new = gamer_friend_number_new+1
                     else:
@@ -584,7 +585,7 @@ if open_googlesheets_status == True:
                             gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
                         else: #如果日期不等於空白
                             gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] = gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                        gamer_data_new["friend"][gamer_friend_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["friend"][gamer_friend_number_new]["state"], gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"], gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["followday"], gamer_friend_string, gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        gamer_data_new["friend"][gamer_friend_number_new]["followday"] = get_followday(number, start_time, i, gamer_data_new["friend"][gamer_friend_number_new]["status"], gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"], gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["followday"], gamer_friend_string, gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         gamer_friend_number_new = gamer_friend_number_new+1
                     else:
                         del gamer_data_new["friend"][gamer_friend_number_new] #如果從巴哈取得的朋友account的值沒有在串列裡，刪除以gamer_friend_number_new為名的鍵

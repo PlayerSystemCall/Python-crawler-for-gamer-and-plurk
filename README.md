@@ -27,7 +27,7 @@
  │└study_gamer_data_ver1.py   
  │　└study_gamer_data_ver2.py=c.n.=>"Python_crawler_for_gamer_ver2.py"   
  │　　└Python_crawler_main_for_gamer_ver3.py   
- └──"Python_crawler_for_gamer_ver2.py" and Python_crawler_for_gamer_ver2.py   
+ └──"Python_crawler_for_plurk_ver3.py" and Python_crawler_for_gamer_ver2.py   
  　　　├"Player_SystemCall_account.py"   
  　　　└Python_crawler_sub_ver1.py   
 ## 備註Annotation   

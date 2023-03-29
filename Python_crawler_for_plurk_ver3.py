@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+import re
 import json
 import socket
-import js2xml
 import requests
 import pygsheets
 from lxml import etree
@@ -55,7 +55,7 @@ def go_to_web(web_URL): #測試網路連結的狀態
             time.sleep(30) #停頓30秒
             web_testtime = web_testtime + 1 #測試網路連線的次數加1
         else: #等於200
-            Go_to_web.status_code = web_status
+            web_status = Go_to_web.status_code 
             web_testtime = web_testtime + 1 #測試網路連線的次數加1
         Go_to_web.close() #關閉對web_URL夾帶headers發出GET請求
         if web_status == 200 or web_testtime == 3: #如果網路正常或是測試網路連線3次
@@ -63,8 +63,8 @@ def go_to_web(web_URL): #測試網路連結的狀態
         else:
             return web_status #回傳程式調整的網路狀態碼
 
-def get_followday(number, start_time, i, state, startfollowdate, followday, string, endfollowdate, worksheet): #取得追蹤天數
-    if state == "old": #如果狀態為old(老追蹤者)
+def get_followday(number, start_time, i, status, startfollowdate, followday, string, endfollowdate, worksheet): #取得追蹤天數
+    if status == "old": #如果狀態為old(老追蹤者)
         try:
             startfollowdate = datetime.strptime(startfollowdate, "%Y-%m-%d %H:%M:%S") #將開始追蹤時間轉成datetime格式
             today_date = datetime.strptime(str(start_time).split(".")[0], "%Y-%m-%d %H:%M:%S") #將程式開始執行的時間start_time取出年月日
@@ -101,9 +101,9 @@ def lastday_of_month(year, month): #取得該年該月最後一天
 def get_nic_data(): #取得正在使用的網路卡資料
     import psutil
     nic_list = psutil.net_if_addrs() #取得網路連線清單
-    nic_list_state = psutil.net_if_stats() #取得網路連線狀態清單
+    nic_list_status = psutil.net_if_stats() #取得網路連線狀態清單
     for nic in nic_list: #取出其中一個網路
-        if (nic_list_state[nic].isup == True) & (len(nic_list[nic]) == 3): #如果該網路正在連線和不是Loopback Pseudo-Interface 1
+        if (nic_list_status[nic].isup == True) & (len(nic_list[nic]) == 3): #如果該網路正在連線和不是Loopback Pseudo-Interface 1
             nic_data = [nic, {"mac" : nic_list[nic][0].address,"ipv4" : nic_list[nic][1].address, "ipv6" : nic_list[nic][2].address}] #獲取該網路資訊
     return nic_data[0], nic_data[1] #回傳網路名稱(非SSID)和其mac、ipv4和ipv6
 
@@ -119,17 +119,17 @@ def get_ip(): #取得網際網路(外網)IP
     import json
     get_ip_link = ["http://httpbin.org/ip", "https://ifconfig.me/ip"] #查詢IP網址串列
     i = 0 #IP網址串列順序
-    state = 0 #取得IP的狀態碼
-    while i < 2 and state != 1: #當順序小於2和狀態碼等於0時，持續運作
+    status = 0 #取得IP的狀態碼
+    while i < 2 and status != 1: #當順序小於2和狀態碼等於0時，持續運作
         try:
             headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19577"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
             go_to_url = requests.get(get_ip_link[i], headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對get_ip_link[i]的網址夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能
             if i == 0: #依據網址原始碼做相對應資訊之取出
                 ip = json.loads(go_to_url.text)["origin"] #將字串變成python的字典再取出相對的值
-                state = 1
+                status = 1
             if i == 1: #依據網址原始碼做相對應資訊之取出
                 ip = go_to_url.text #直接取出值
-                state = 1
+                status = 1
             go_to_url.close() #關閉與get_ip_link[i]之網址的連結
         except:
             i = i+1 #順序加1
@@ -265,11 +265,7 @@ try:
             number = number+2
             xpath_on_web = "/html/body/script[{}]/text()".format(number) #指定text()在網頁程式碼的位置(Xpath表達式)
             jscode_2nd = plurk_fan_sourcecode.xpath(xpath_on_web)[0] #使用Xpath表達式提出，為jscode_2nd串列的第一個元素
-            jscode_to_xml = js2xml.parse(str(jscode_2nd), encoding='utf-8', debug=False) #將jscode_2nd轉成字串再轉換成xml標記的文本
-            xpath_on_jscode = "//program/assign[@operator='=']/right/new/arguments/binaryoperation[@operation='+']/left/functioncall/function/dotaccessor/object/string/text()" #text()在xml結構中的位置(Xpath表達式)
-            plurk_dates_on_jsxml = jscode_to_xml.xpath(xpath_on_jscode) #使用Xpath表達式提出，為plurk_dates_on_jsxml串列
-            plurk_data_get["fan"][i]["regdate"] = str(plurk_dates_on_jsxml[1]) #粉絲噗浪帳號的建立日期為plurk_dates_on_jsxml串列第2個
-            plurk_data_get["fan"][i]["lastondate"] = str(plurk_dates_on_jsxml[0]) #粉絲噗浪帳號的最後上線日期為plurk_dates_on_jsxml串列第1個
+            plurk_data_get["fan"][i]["lastondate"], plurk_data_get["fan"][i]["regdate"] = re.findall("\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d", jscode_2nd) #從jscode_2nd抽出日期
         else: #應該不會有這情況
             plurk_data_get["fan"][i]["regdate"] = "版面無區塊"
             plurk_data_get["fan"][i]["lastondate"] = "版面無區塊" 
@@ -320,11 +316,8 @@ try:
             number = number+2
             xpath_on_web = "/html/body/script[{}]/text()".format(number) #指定text()在網頁程式碼的位置(Xpath表達式)
             jscode_2nd = plurk_friend_sourcecode.xpath(xpath_on_web)[0] #使用Xpath表達式提出，為jscode_2nd串列的第一個元素
-            jscode_to_xml = js2xml.parse(str(jscode_2nd), encoding='utf-8', debug=False) #將results_on_web轉成字串再轉換成xml標記的文本
-            xpath_on_jscode = "//program/assign[@operator='=']/right/new/arguments/binaryoperation[@operation='+']/left/functioncall/function/dotaccessor/object/string/text()" #text()在xml格式中的位置(Xpath表達式)
-            plurk_dates_on_jsxml = jscode_to_xml.xpath(xpath_on_jscode) #使用Xpath表達式提出，為plurk_dates_on_jsxml串列
-            plurk_data_get["friend"][i]["regdate"] = str(plurk_dates_on_jsxml[1]) #好友噗浪帳號的建立日期為plurk_dates_on_jsxml串列第2個
-            plurk_data_get["friend"][i]["lastondate"] = str(plurk_dates_on_jsxml[0]) #好友噗浪帳號的譖後上線日期為plurk_dates_on_jsxml串列第1個
+            jscode_to_xml = re.findall("\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d", jscode_2nd) #將results_on_web轉成字串再轉換成xml標記的文本
+            plurk_data_get["friend"][i]["lastondate"], plurk_data_get["friend"][i]["regdate"] = re.findall("\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d", jscode_2nd) #從jscode_2nd抽出日期
         else: #應該不會有這情況
             plurk_data_get["friend"][i]["regdate"] = "版面無區塊"
             plurk_data_get["friend"][i]["lastondate"] = "版面無區塊"
@@ -339,8 +332,10 @@ try:
     googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
     open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
     open_googlesheets_status = True
+    print("open_googlesheets_status", open_googlesheets_status)
 except:
     open_googlesheets_status = False
+    print("open_googlesheets_status", open_googlesheets_status)
 
 if open_googlesheets_status == True:
     try:
@@ -356,8 +351,10 @@ if open_googlesheets_status == True:
         
         runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
         basic_status = True
+        print("basic_status", basic_status)
     except:
         basic_status = False
+        print("basic_status", basic_status)
     
     if basic_status == True:
         try: #寫入試算表1："人氣紀錄"
@@ -458,7 +455,7 @@ if open_googlesheets_status == True:
                         plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_get["fan"][i]["regdate"]
                         plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_get["fan"][i]["lastondate"]
                         plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                        plurk_data_new["fan"][plurk_fan_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["fan"][plurk_fan_number_new]["state"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, 0, worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        plurk_data_new["fan"][plurk_fan_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["fan"][plurk_fan_number_new]["status"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = "" #結束時間為空白
                         plurk_fan_number_new = plurk_fan_number_new+1
                     else:
@@ -498,7 +495,7 @@ if open_googlesheets_status == True:
                             plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
                         else: #如果日期不等於空白
                             plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                        plurk_data_new["fan"][plurk_fan_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["fan"][plurk_fan_number_new]["state"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        plurk_data_new["fan"][plurk_fan_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["fan"][plurk_fan_number_new]["status"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         plurk_fan_number_new = plurk_fan_number_new+1
                     else:
                         del plurk_data_new["fan"][plurk_fan_number_new] #如果從試算表取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
@@ -517,7 +514,7 @@ if open_googlesheets_status == True:
                         plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][i]["regdate"]
                         plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][i]["lastondate"]
                         plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                        plurk_data_new["friend"][plurk_friend_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["friend"][plurk_friend_number_new]["state"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, 0, worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        plurk_data_new["friend"][plurk_friend_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["friend"][plurk_friend_number_new]["status"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = "" #結束時間為空白
                         plurk_friend_number_new = plurk_friend_number_new+1
                     else:
@@ -558,7 +555,7 @@ if open_googlesheets_status == True:
                             plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
                         else: #如果日期不等於空白
                             plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                        plurk_data_new["friend"][plurk_friend_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["friend"][plurk_friend_number_new]["state"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, state, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                        plurk_data_new["friend"][plurk_friend_number_new]["followday"] = get_followday(number, start_time, i, plurk_data_new["friend"][plurk_friend_number_new]["status"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                         plurk_friend_number_new = plurk_friend_number_new+1
                     else:
                         del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
