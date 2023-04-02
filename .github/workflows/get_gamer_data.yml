@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: checkout repo content
-      run: actions/checkout@v2
+      uses: actions/checkout@v2
     
     - name: setup python
       uses: actions/setup-python@v4
