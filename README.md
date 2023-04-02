@@ -3,9 +3,9 @@
  Get the data from account homepages of Gamer(巴哈姆特) and Plurk(噗浪) and then write it into Google Sheets.   
 ## 專案文件 Project File
  ├必要文件Necessary Documents   
- │├README.md
- │├.gitignore
- │├.gitattributes
+ │├README.md  
+ │├.gitignore  
+ │├.gitattributes  
  │├**Player_SystemCall_account.py**   
  │└**google_sheets_API_key.json**   
  ├副程式Subprogram   
