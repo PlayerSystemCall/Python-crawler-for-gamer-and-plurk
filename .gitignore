@@ -2,3 +2,4 @@
 Player_SystemCall_account.py
 # Hide file type
 *.json
+*.env
