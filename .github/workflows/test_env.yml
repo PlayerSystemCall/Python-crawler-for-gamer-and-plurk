@@ -4,7 +4,7 @@ on:
   workflow_dispatch: 
 
 env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  TESTSECRETS: ${{ secrets.TESTSECRETS }}
 
 jobs: 
   run_python_file: 
