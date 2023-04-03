@@ -21,7 +21,7 @@ jobs:
         pip install -r docs/package.txt
     
     - name: input the secret
-        env: 
+        with: 
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
     
     - name: execute python script
