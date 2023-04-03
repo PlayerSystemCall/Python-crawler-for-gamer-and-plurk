@@ -4,7 +4,7 @@ on:
   workflow_dispatch: 
 
 jobs: 
-  creat json: 
+  creat_json: 
     runs-on: windows-latest
     steps: 
     - name: checkout repo content
