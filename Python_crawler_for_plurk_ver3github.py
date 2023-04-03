@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
+import os
 import re
 import json
 import socket
 import requests
 import pygsheets
 from lxml import etree
+from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from Player_SystemCall_account import plurk_account as plurk_account
+
+Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
 
 def TWtime(): #獲取台灣時間
     import pytz
@@ -227,7 +230,7 @@ try:
     #取得噗浪粉絲名單網頁原始碼，找到資料的的html區塊，取出資料
     plurk_fanlist_url = "https://www.plurk.com/Friends/getFansByOffset" #噗浪的粉絲名單請求網址
     headers = {"User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
-    data = {"user_id": plurk_account["id"], "offset":"0", "limit": "10000000"} #夾帶資料，個人ID、offset和單次送出來的人數
+    data = {"user_id": Player_SystemCall_plurk_id, "offset":"0", "limit": "10000000"} #夾帶資料，個人ID、offset和單次送出來的人數
     Go_to_plurk_fanlist = requests.post(plurk_fanlist_url, headers = headers, data = data, timeout = 60, allow_redirects = False, stream = True, verify = False) #對plurk_fanlist_url夾帶headers和data發出POST請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
     requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
     plurk_data_get["other"]["plurk_fan_idlist"] = [] #建立串列放粉絲ID
@@ -278,7 +281,7 @@ try:
     #取得噗浪朋友名單網頁原始碼，找到資料的的html區塊，取出資料
     plurk_friendlist_url = "https://www.plurk.com/Friends/getFriendsByOffset" #噗浪的朋友名單請求網址
     headers = {"User-Agent" : "Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
-    data = {"user_id": plurk_account["id"], "offset":"0", "limit": "10000000"} #夾帶資料，個人ID、offset和單次送出來的人數
+    data = {"user_id": Player_SystemCall_plurk_id, "offset":"0", "limit": "10000000"} #夾帶資料，個人ID、offset和單次送出來的人數
     Go_to_plurk_friendlist = requests.post(plurk_friendlist_url, headers = headers, data = data,timeout = 60, allow_redirects = False, stream = True, verify = False) #對plurk_friendlist_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
     requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
     plurk_data_get["other"]["plurk_friend_idlist"] = [] #建立串列放好友ID
