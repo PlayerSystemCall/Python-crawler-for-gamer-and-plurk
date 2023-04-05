@@ -16,5 +16,6 @@ jobs:
       with:
         name: "cypress.json"
         json: ${{ secrets.TEST_API_KEY }}
-        dir: 'docs/'
+        run: |
+          echo ${{ secrets.TEST_API_KEY }}
       
