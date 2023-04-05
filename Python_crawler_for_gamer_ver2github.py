@@ -361,7 +361,7 @@ except:
 
 try:
     #開啟試算表
-    certificate = pygsheets.authorize(service_file='.\google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
+    certificate = pygsheets.authorize(service_file='google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
     googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
     open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
     open_googlesheets_status = True
