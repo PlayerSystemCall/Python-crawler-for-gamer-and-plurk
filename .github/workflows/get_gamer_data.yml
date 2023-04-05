@@ -33,4 +33,4 @@ jobs:
         pip install -r docs/package.txt
         
     - name: execute python script
-      run: python Python_crawler_for_gamer_ver2githuub.py
+      run: python Python_crawler_for_gamer_ver2github.py

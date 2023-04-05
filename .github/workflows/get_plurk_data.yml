@@ -2,7 +2,7 @@ name: get_plurk_data
 
 on:
   schedule:
-    - cron: '00 03 * * *'
+    - cron: '00 00 * * *'
   workflow_dispatch:
 
 env:
@@ -33,4 +33,4 @@ jobs:
         pip install -r docs/package.txt
         
     - name: execute python script
-      run: python Python_crawler_for_plurk_ver3githuub.py
+      run: python Python_crawler_for_plurk_ver3github.py
