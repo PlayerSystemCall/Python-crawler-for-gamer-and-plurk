@@ -3,9 +3,6 @@ name: test_env
 on: 
   workflow_dispatch: 
 
-env: 
-  GOOGLE_SHEETS_API_KEY: ${{secrets.GOOGLE_SHEETS_API_KEY}}
-
 jobs: 
   creat_json: 
     runs-on: windows-latest
@@ -22,6 +19,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r docs/package.txt  
+    
+    - name: create-json
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "google_sheets_API_key.json"
+        json: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
     
     - name: execute python script read and print
       run: python envtest.py
