@@ -29,6 +29,9 @@
  │├.gitattributes  
  │├**Player_SystemCall_account.py(Only in Github Secret)**  
  │└**google_sheets_API_key.json(Only in Github Secret)**  
+ ├自動化執行 Automation Run  
+ │├**get_gamer_data.yml**  
+ │└**get_plurk_data.yml**  
  ├副程式Subprogram  
  │└Python_crawler_subprogram_ver1.py  
  ├主程式Mainprogram （巴哈姆特Gamer） (a working social networking site)  
