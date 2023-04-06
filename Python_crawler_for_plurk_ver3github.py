@@ -335,10 +335,8 @@ try:
     googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
     open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
     open_googlesheets_status = True
-    print("open_googlesheets_status", open_googlesheets_status)
 except:
     open_googlesheets_status = False
-    print("open_googlesheets_status", open_googlesheets_status)
 
 if open_googlesheets_status == True:
     try:
@@ -354,10 +352,8 @@ if open_googlesheets_status == True:
         
         runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
         basic_status = True
-        print("basic_status", basic_status)
     except:
         basic_status = False
-        print("basic_status", basic_status)
     
     if basic_status == True:
         try: #寫入試算表1："人氣紀錄"
