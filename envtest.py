@@ -13,7 +13,9 @@ print("SERVICE_ACCOUNT_FILE=", SERVICE_ACCOUNT_FILE)
 STORAGE_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
 print("STORAGE_BUCKET_NAME=", STORAGE_BUCKET_NAME)
 """
+
 GOOGLE_SHEETS_API_KEY = os.getenv('GOOGLE_SHEETS_API_KEY')
+print(type(GOOGLE_SHEETS_API_KEY))
 
 try:
     certificate = pygsheets.authorize(service_account_env_var=GOOGLE_SHEETS_API_KEY) #取得位置在同層級目錄的Google sheets API憑證
