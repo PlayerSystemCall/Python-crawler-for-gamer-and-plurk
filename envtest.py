@@ -6,15 +6,15 @@ from dotenv import load_dotenv
 """
 GCP_PROJECT_ID = os.getenv('GCP_PROJECT_ID')
 print("GCP_PROJECT_ID=", GCP_PROJECT_ID)
-
 SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE')
 print("SERVICE_ACCOUNT_FILE=", SERVICE_ACCOUNT_FILE)
-
 STORAGE_BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
 print("STORAGE_BUCKET_NAME=", STORAGE_BUCKET_NAME)
 """
 
 GOOGLE_SHEETS_API_KEY = os.getenv('GOOGLE_SHEETS_API_KEY')
+print(type(GOOGLE_SHEETS_API_KEY))
+GOOGLE_SHEETS_API_KEY = dict(GOOGLE_SHEETS_API_KEY)
 print(type(GOOGLE_SHEETS_API_KEY))
 
 try:
@@ -24,3 +24,4 @@ try:
     print("Yes Link")
 except:
     print("No Link")
+    
