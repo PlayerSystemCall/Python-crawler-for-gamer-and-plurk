@@ -197,7 +197,7 @@ try:
     code_section_1_status = "Ｏ"
     print("code_section_1_status", code_section_1_status)
 except:
-    code_section_1_status = "Ｘ"
+    code_section_1_status = "✕"
     print("code_section_1_status", code_section_1_status)
 
 try:
@@ -226,10 +226,10 @@ try:
         xpath_on_web = "//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/div[@class='BH-rbox MSG-list1']/ul/li[6]/text()" #text()在網頁程式碼的位置(Xpath表達式)
         gamer_follower_number = int(gamer_sourcecode.xpath(xpath_on_web)[0][4:]) #指定第1個元素的第5個元素之後的字串，並數字化 #取得粉絲人數
         Go_to_gamer.close() #關閉對gamer_url夾帶headers發出GET請求
-    code_section_2_status = "Ｏ"
+    code_section_2_status = "〇"
     print("code_section_2_status", code_section_2_status)
 except:
-    code_section_2_status = "Ｘ"
+    code_section_2_status = "✕"
     print("code_section_2_status", code_section_2_status)
 
 gamer_data_get = {"follower" : {}, "friend" : {}, "other" : {}} #建立字典，並在裡面建立follower、friend和other鍵，功能為放置從巴哈姆特取得(昨天)的資料
@@ -294,10 +294,10 @@ try:
             gamer_data_get["follower"][i]["regdate"] = None
             gamer_data_get["follower"][i]["lastondate"] = None
         Go_to_gamer_follower.close() #關閉對gfol_url夾帶headers發出GET請求
-    code_section_3_status = "Ｏ"
+    code_section_3_status = "〇"
     print("code_section_3_status", code_section_3_status)
 except:
-    code_section_3_status = "Ｘ"
+    code_section_3_status = "✕"
     print("code_section_3_status", code_section_3_status)
 
 try:
@@ -361,10 +361,10 @@ try:
             gamer_data_get["friend"][i]["regdate"] = None
             gamer_data_get["friend"][i]["lastondate"] = None
         Go_to_gamer_friend.close() #關閉對gamer_friend_url夾帶headers發出GET請求
-    code_section_4_status = "Ｏ"
+    code_section_4_status = "〇"
     print("code_section_4_status", code_section_4_status)
 except:
-    code_section_4_status = "Ｘ"
+    code_section_4_status = "✕"
     print("code_section_4_status", code_section_4_status)
 
 try:
@@ -438,10 +438,10 @@ if open_googlesheets_status == True:
                         worksheet.update_values("H{}".format(gamer_writesit-15), [["本年總和"], ["=SUM(F{}:F{})".format(gamer_writesit+1-(lastday_of_month(int(ad_year_yesterday.split("年")[0]), 1)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 2)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 3)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 4)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 5)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 6)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 7)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 8)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 9)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 10)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 11)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 12)))], ["本年日平均"], ["=AVERAGE(F{}:F{})".format(gamer_writesit+1-(lastday_of_month(int(ad_year_yesterday.split("年")[0]), 1)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 2)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 3)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 4)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 5)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 6)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 7)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 8)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 9)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 10)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 11)+lastday_of_month(int(ad_year_yesterday.split("年")[0]), 12)))]]) #寫入本年總和和日平均
             worksheet.update_value("H4", "=394+SUM($F$3:F{})".format(gamer_writesit)) #寫入巴哈總人氣數
             worksheet.update_value("H56", "=394+SUM($F$3:F{})".format(gamer_writesit)) #寫入巴哈總人氣數
-            code_section_5_status = "Ｏ"
+            code_section_5_status = "〇"
             print("code_section_5_status", code_section_5_status)
         except:
-            code_section_5_status = "Ｘ"
+            code_section_5_status = "✕"
             print("code_section_5_status", code_section_5_status)
         
         try:
@@ -625,10 +625,10 @@ if open_googlesheets_status == True:
                 worksheet.update_value("M{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["startfollowdate"]) #寫入開始追蹤日期
                 worksheet.update_value("N{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["followday"]) #寫入追蹤天數
                 worksheet.update_value("O{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["endfollowdate"]) #寫入結束追蹤日期
-            code_section_6_status = "Ｏ"
+            code_section_6_status = "〇"
             print("code_section_6_status", code_section_6_status)
         except:
-            code_section_6_status = "Ｘ"
+            code_section_6_status = "✕"
             print("code_section_6_status", code_section_6_status)
         
         try:
@@ -653,7 +653,7 @@ if open_googlesheets_status == True:
             worksheet.update_value("N{}".format(number+3), code_section_6_status) #寫入程式運作狀態 #名單寫入
             worksheet.update_value("P{}".format(number+3), start_timecall[7]) #寫入時間伺服器連結
             worksheet.update_value("Q{}".format(number+3), start_timecall[8]) #寫入時間伺服器連結在時間伺服器串列中的編號
-            if code_section_1_status == "Ｏ":
+            if code_section_1_status == "〇":
                 worksheet.update_value("R{}".format(number+3), device_name) #寫入裝置名稱
                 worksheet.update_value("S{}".format(number+3), str(device_user[0])+","+str(device_user[1])) #寫入裝置使用者
                 worksheet.update_value("T{}".format(number+3), mac_adderss) #寫入裝置網路卡號碼
@@ -676,10 +676,10 @@ if open_googlesheets_status == True:
                     worksheet.update_value("AE{}".format(number+3), ip_data["timezone"]) #寫入外網IP所在的時區
                     worksheet.update_value("AF{}".format(number+3), ip_data["org"]) #寫入外網IP所在的網路服務提供公司
                     worksheet.update_value("AG{}".format(number+3), ip_data["as"]) #寫入外網IP所在的自治系統
-            code_section_7_status = "Ｏ"
+            code_section_7_status = "〇"
             print("code_section_7_status", code_section_7_status)
         except:
-            code_section_7_status = "Ｘ"
+            code_section_7_status = "✕"
             print("code_section_7_status", code_section_7_status)
             worksheet.update_value("A{}".format(number+3), runtime+1) #寫入本次的運作次數
             if str(start_time).split(" ")[0] == str(worksheet.get_value("E{}".format(number+2))): #start_time的日期等於("D{}".format(number+1))的字串
