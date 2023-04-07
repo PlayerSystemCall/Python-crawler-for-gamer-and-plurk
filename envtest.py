@@ -20,4 +20,3 @@ try:
     print("Yes Link")
 except:
     print("No Link")
-    
