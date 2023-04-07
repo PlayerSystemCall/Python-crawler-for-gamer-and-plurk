@@ -225,9 +225,11 @@ try:
         gamer_follower_number = int(gamer_sourcecode.xpath(xpath_on_web)[0][4:]) #指定第1個元素的第5個元素之後的字串，並數字化 #取得粉絲人數
         Go_to_gamer.close() #關閉對gamer_url夾帶headers發出GET請求
     code_section_2_status = "〇"
+    print("code_section_2_status Yes")
 except:
     code_section_2_status = "✕"
-print("code_section_2_status", code_section_2_status)
+    print("code_section_2_status No")
+
 gamer_data_get = {"follower" : {}, "friend" : {}, "other" : {}} #建立字典，並在裡面建立follower、friend和other鍵，功能為放置從巴哈姆特取得(昨天)的資料
     #account為巴哈帳戶，nickname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"account" : [], "nickname" :[], "regdate" : [], "lastondate" : []
 
