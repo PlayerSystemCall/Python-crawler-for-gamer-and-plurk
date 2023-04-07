@@ -227,7 +227,7 @@ try:
     code_section_2_status = "〇"
 except:
     code_section_2_status = "✕"
-
+print("code_section_2_status", code_section_2_status)
 gamer_data_get = {"follower" : {}, "friend" : {}, "other" : {}} #建立字典，並在裡面建立follower、friend和other鍵，功能為放置從巴哈姆特取得(昨天)的資料
     #account為巴哈帳戶，nickname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"account" : [], "nickname" :[], "regdate" : [], "lastondate" : []
 
@@ -383,7 +383,7 @@ if open_googlesheets_status == True:
         basic_status = True
     except:
         basic_status = False
-    
+    print("basic_status", basic_status)
     if basic_status == True:
         try: #寫入試算表1："人氣紀錄"
             worksheet = open_googlesheets.worksheet('id', 0) #以sheetId定位試算表位置為第1張的"人氣紀錄表"
