@@ -194,11 +194,9 @@ try:
     ip = get_ip() #取得裝置對外的IP
     if ip != None:
         ip_data = get_ip_data(ip) #查詢IP所在地資料
-    code_section_1_status = "Ｏ"
-    print("code_section_1_status", code_section_1_status)
+    code_section_1_status = "〇"
 except:
     code_section_1_status = "✕"
-    print("code_section_1_status", code_section_1_status)
 
 try:
     #取得巴哈小屋網頁原始碼，找到資料的的html區塊，取出資料
@@ -227,10 +225,8 @@ try:
         gamer_follower_number = int(gamer_sourcecode.xpath(xpath_on_web)[0][4:]) #指定第1個元素的第5個元素之後的字串，並數字化 #取得粉絲人數
         Go_to_gamer.close() #關閉對gamer_url夾帶headers發出GET請求
     code_section_2_status = "〇"
-    print("code_section_2_status", code_section_2_status)
 except:
     code_section_2_status = "✕"
-    print("code_section_2_status", code_section_2_status)
 
 gamer_data_get = {"follower" : {}, "friend" : {}, "other" : {}} #建立字典，並在裡面建立follower、friend和other鍵，功能為放置從巴哈姆特取得(昨天)的資料
     #account為巴哈帳戶，nickname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"account" : [], "nickname" :[], "regdate" : [], "lastondate" : []
@@ -256,26 +252,26 @@ try:
         gamer_data_get["follower"][i]["account"] = gamer_data_get["other"]["gamer_follower_accountlist"][i]
         gamer_data_get["follower"][i]["nickname"] = gamer_data_get["other"]["gamer_follower_nicknamelist"][i]
         try:
-            try:
-                gamer_follower_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(gamer_data_get["follower"][i]["account"]) #組合成追蹤者的舊版巴哈小屋連結
-                gamer_follower_statuscode = go_to_web(gamer_follower_url) #回傳網路狀態碼
-                version = "Old" #標示為舊版小屋
-            except:
-                gamer_follower_url = "https://home.gamer.com.tw/profile/index.php?owner={}".format(gamer_data_get["follower"][i]["account"]) #組合成追蹤者的新版巴哈小屋連結
+            gamer_follower_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(gamer_data_get["follower"][i]["account"]) #組合成追蹤者的舊版巴哈小屋連結
+            gamer_follower_statuscode = go_to_web(gamer_follower_url) #回傳網路狀態碼
+            if gamer_follower_statuscode != 200:
+                gamer_follower_url = "https://home.gamer.com.tw/profile/index.php?owner={}".format(gamer_data_get["follower"][i]["account"]) #組合成追蹤者的舊版巴哈小屋連結
                 gamer_follower_statuscode = go_to_web(gamer_follower_url) #回傳網路狀態碼
                 version = "New" #標示為新版小屋
+            else:
+                version = "Old" #標示為舊版小屋
         except:
-            version = "Delete"      
+            version = "Delete" 
         headers = {"User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         Go_to_gamer_follower = requests.get(gamer_follower_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對gamer_follower_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
         requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
         Go_to_gamer_follower.encoding = "utf-8" #指定網頁的編碼格式
         gamer_follower_sourcecode = etree.HTML(Go_to_gamer_follower.text) #取得網頁原始碼
         gamer_title_number = 0 #巴哈小屋大標的序號
-        status = False #表示狀態
+        status = None #表示狀態
         if gamer_follower_statuscode == 200 and version == "Old": #如果可以用舊版小屋連線
             gamer_title = list(map(str, gamer_follower_sourcecode.xpath("//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/h5/text()"))) #從巴哈小屋的原始碼篩出大標
-            while status == False and gamer_title_number < len(gamer_title): #當status等於False和gamer_title_number小於巴哈大標數量時，持續運作
+            while status == None and gamer_title_number < len(gamer_title): #當status等於False和gamer_title_number小於巴哈大標數量時，持續運作
                 if "個人紀錄" == gamer_title[gamer_title_number]:
                     xpath_on_web = "//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/div[@class='BH-rbox BH-list1']/ul/li[4]/text()" #取得註冊日期
                     gamer_data_get["follower"][i]["regdate"] = str(gamer_follower_sourcecode.xpath(xpath_on_web)[0]).split("：")[1] #使用Xpath表達式提出，將帳號建立日放進regdate鍵的值
@@ -284,6 +280,7 @@ try:
                     status = True
                 else:
                     gamer_title_number = gamer_title_number+1 #巴哈小屋大標的序號加1
+                    status = False
             if status == False:
                 gamer_data_get["follower"][i]["regdate"] = "舊版無區塊" #巴哈姆特模塊化特色所致
                 gamer_data_get["follower"][i]["lastondate"] = "舊版無區塊"
@@ -295,10 +292,8 @@ try:
             gamer_data_get["follower"][i]["lastondate"] = None
         Go_to_gamer_follower.close() #關閉對gfol_url夾帶headers發出GET請求
     code_section_3_status = "〇"
-    print("code_section_3_status", code_section_3_status)
 except:
     code_section_3_status = "✕"
-    print("code_section_3_status", code_section_3_status)
 
 try:
     #取得巴哈朋友名單網頁原始碼，找到資料的的html區塊，取出資料
@@ -320,19 +315,17 @@ try:
         gamer_data_get["friend"][i] = {}
         gamer_data_get["friend"][i]["account"] = gamer_data_get["other"]["gamer_friend_accountlist"][i]
         gamer_data_get["friend"][i]["nickname"] = gamer_data_get["other"]["gamer_friend_nicknamelist"][i]
-        gamer_friend_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(gamer_data_get["friend"][i]["account"]) #組合成追蹤者的巴哈小屋(舊版)連結
-        gamer_friend_statuscode = go_to_web(gamer_friend_url) #回傳網路狀態碼
         try:
-            try:
-                gamer_friend_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(gamer_data_get["friend"][i]["account"]) #組合成好友的舊版巴哈小屋連結
-                gamer_friend_statuscode = go_to_web(gamer_friend_url) #回傳網路狀態碼
-                version = "Old" #標示為舊版小屋
-            except:
-                gamer_friend_url = "https://home.gamer.com.tw/profile/index.php?owner={}".format(gamer_data_get["friend"][i]["account"]) #組合成好友的新版巴哈小屋連結
+            gamer_friend_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(gamer_data_get["friend"][i]["account"]) #組合成追蹤者的舊版巴哈小屋連結
+            gamer_friend_statuscode = go_to_web(gamer_friend_url) #回傳網路狀態碼
+            if gamer_friend_statuscode != 200:
+                gamer_friend_url = "https://home.gamer.com.tw/profile/index.php?owner={}".format(gamer_data_get["friend"][i]["account"]) #組合成追蹤者的舊版巴哈小屋連結
                 gamer_friend_statuscode = go_to_web(gamer_friend_url) #回傳網路狀態碼
                 version = "New" #標示為新版小屋
+            else:
+                version = "Old" #標示為舊版小屋
         except:
-            version = "Delete"
+            version = "Delete" 
         headers = {"User-Agent" : "Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         Go_to_gamer_friend = requests.get(gamer_friend_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對gfri_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
         requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
@@ -362,21 +355,17 @@ try:
             gamer_data_get["friend"][i]["lastondate"] = None
         Go_to_gamer_friend.close() #關閉對gamer_friend_url夾帶headers發出GET請求
     code_section_4_status = "〇"
-    print("code_section_4_status", code_section_4_status)
 except:
     code_section_4_status = "✕"
-    print("code_section_4_status", code_section_4_status)
 
 try:
     #開啟試算表
-    certificate = pygsheets.authorize(service_file='google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
+    certificate = pygsheets.authorize(service_file='.\google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
     googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
     open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
     open_googlesheets_status = True
-    print("open_googlesheets_status", open_googlesheets_status)
 except:
     open_googlesheets_status = False
-    print("open_googlesheets_status", open_googlesheets_status)
 
 if open_googlesheets_status == True:
     try:
@@ -392,10 +381,8 @@ if open_googlesheets_status == True:
         
         runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
         basic_status = True
-        print("basic_status", basic_status)
     except:
         basic_status = False
-        print("basic_status", basic_status)
     
     if basic_status == True:
         try: #寫入試算表1："人氣紀錄"
@@ -439,10 +426,8 @@ if open_googlesheets_status == True:
             worksheet.update_value("H4", "=394+SUM($F$3:F{})".format(gamer_writesit)) #寫入巴哈總人氣數
             worksheet.update_value("H56", "=394+SUM($F$3:F{})".format(gamer_writesit)) #寫入巴哈總人氣數
             code_section_5_status = "〇"
-            print("code_section_5_status", code_section_5_status)
         except:
             code_section_5_status = "✕"
-            print("code_section_5_status", code_section_5_status)
         
         try:
             #寫入試算表2："巴哈追蹤名單"
@@ -626,10 +611,8 @@ if open_googlesheets_status == True:
                 worksheet.update_value("N{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["followday"]) #寫入追蹤天數
                 worksheet.update_value("O{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["endfollowdate"]) #寫入結束追蹤日期
             code_section_6_status = "〇"
-            print("code_section_6_status", code_section_6_status)
         except:
             code_section_6_status = "✕"
-            print("code_section_6_status", code_section_6_status)
         
         try:
             #寫入試算表4："系統訊息"
@@ -677,10 +660,8 @@ if open_googlesheets_status == True:
                     worksheet.update_value("AF{}".format(number+3), ip_data["org"]) #寫入外網IP所在的網路服務提供公司
                     worksheet.update_value("AG{}".format(number+3), ip_data["as"]) #寫入外網IP所在的自治系統
             code_section_7_status = "〇"
-            print("code_section_7_status", code_section_7_status)
         except:
-            code_section_7_status = "✕"
-            print("code_section_7_status", code_section_7_status)
+            code_section_7_status = "✕" 
             worksheet.update_value("A{}".format(number+3), runtime+1) #寫入本次的運作次數
             if str(start_time).split(" ")[0] == str(worksheet.get_value("E{}".format(number+2))): #start_time的日期等於("D{}".format(number+1))的字串
                 worksheet.update_value("B{}".format(number+3), date_number) #寫入同樣天數
