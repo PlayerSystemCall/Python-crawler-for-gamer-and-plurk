@@ -195,8 +195,10 @@ try:
     if ip != None:
         ip_data = get_ip_data(ip) #查詢IP所在地資料
     code_section_1_status = "〇"
+    print("code_section_1_status", code_section_1_status)
 except:
     code_section_1_status = "✕"
+    print("code_section_1_status", code_section_1_status)
 
 try:
     #取得巴哈小屋網頁原始碼，找到資料的的html區塊，取出資料
@@ -225,8 +227,10 @@ try:
         gamer_follower_number = int(gamer_sourcecode.xpath(xpath_on_web)[0][4:]) #指定第1個元素的第5個元素之後的字串，並數字化 #取得粉絲人數
         Go_to_gamer.close() #關閉對gamer_url夾帶headers發出GET請求
     code_section_2_status = "〇"
+    print("code_section_2_status", code_section_2_status)
 except:
     code_section_2_status = "✕"
+    print("code_section_2_status", code_section_2_status)
 
 gamer_data_get = {"follower" : {}, "friend" : {}, "other" : {}} #建立字典，並在裡面建立follower、friend和other鍵，功能為放置從巴哈姆特取得(昨天)的資料
     #account為巴哈帳戶，nickname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"account" : [], "nickname" :[], "regdate" : [], "lastondate" : []
@@ -291,8 +295,10 @@ try:
             gamer_data_get["follower"][i]["lastondate"] = None
         Go_to_gamer_follower.close() #關閉對gfol_url夾帶headers發出GET請求
     code_section_3_status = "〇"
+    print("code_section_3_status", code_section_3_status)
 except:
     code_section_3_status = "✕"
+    print("code_section_3_status", code_section_3_status)
 
 try:
     #取得巴哈朋友名單網頁原始碼，找到資料的的html區塊，取出資料
@@ -356,8 +362,10 @@ try:
             gamer_data_get["friend"][i]["lastondate"] = None
         Go_to_gamer_friend.close() #關閉對gamer_friend_url夾帶headers發出GET請求
     code_section_4_status = "〇"
+    print("code_section_4_status", code_section_4_status)
 except:
     code_section_4_status = "✕"
+    print("code_section_4_status", code_section_4_status)
 
 try:
     #開啟試算表
@@ -365,8 +373,10 @@ try:
     googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
     open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
     open_googlesheets_status = True
+    print("open_googlesheets_status", open_googlesheets_status)
 except:
     open_googlesheets_status = False
+    print("open_googlesheets_status", open_googlesheets_status)
 
 if open_googlesheets_status == True:
     try:
@@ -382,8 +392,10 @@ if open_googlesheets_status == True:
         
         runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
         basic_status = True
+        print("basic_status", basic_status)
     except:
         basic_status = False
+        print("basic_status", basic_status)
     
     if basic_status == True:
         try: #寫入試算表1："人氣紀錄"
@@ -427,8 +439,10 @@ if open_googlesheets_status == True:
             worksheet.update_value("H4", "=394+SUM($F$3:F{})".format(gamer_writesit)) #寫入巴哈總人氣數
             worksheet.update_value("H56", "=394+SUM($F$3:F{})".format(gamer_writesit)) #寫入巴哈總人氣數
             code_section_5_status = "〇"
+            print("code_section_5_status", code_section_5_status)
         except:
             code_section_5_status = "✕"
+            print("code_section_5_status", code_section_5_status)
         
         try:
             #寫入試算表2："巴哈追蹤名單"
@@ -612,8 +626,10 @@ if open_googlesheets_status == True:
                 worksheet.update_value("N{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["followday"]) #寫入追蹤天數
                 worksheet.update_value("O{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["endfollowdate"]) #寫入結束追蹤日期
             code_section_6_status = "〇"
+            print("code_section_6_status", code_section_6_status)
         except:
             code_section_6_status = "✕"
+            print("code_section_6_status", code_section_6_status)
         
         try:
             #寫入試算表4："系統訊息"
@@ -661,8 +677,10 @@ if open_googlesheets_status == True:
                     worksheet.update_value("AF{}".format(number+3), ip_data["org"]) #寫入外網IP所在的網路服務提供公司
                     worksheet.update_value("AG{}".format(number+3), ip_data["as"]) #寫入外網IP所在的自治系統
             code_section_7_status = "〇"
+            print("code_section_7_status", code_section_7_status)
         except:
-            code_section_7_status = "✕" 
+            code_section_7_status = "✕"
+            print("code_section_7_status", code_section_7_status)
             worksheet.update_value("A{}".format(number+3), runtime+1) #寫入本次的運作次數
             if str(start_time).split(" ")[0] == str(worksheet.get_value("E{}".format(number+2))): #start_time的日期等於("D{}".format(number+1))的字串
                 worksheet.update_value("B{}".format(number+3), date_number) #寫入同樣天數
