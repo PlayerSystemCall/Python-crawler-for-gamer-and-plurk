@@ -3,9 +3,7 @@ name: get_gamer_data
 on:
   schedule:
     - cron: '00 19 * * *'
-  workflow_dispatch:
-env:
-  PLAYER_SYSTEMCALL_GAMER_ID: ${{ secrets.PLAYER_SYSTEMCALL_GAMER_ID }}
+  workflow_dispatch: 
 jobs:
   run_python_file:
     runs-on: windows-latest
@@ -20,7 +18,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r docs/package.txt
-    - name: create-json
+    - name: import GAMER_ID
+      env: 
+        PLAYER_SYSTEMCALL_GAMER_ID: ${{ secrets.PLAYER_SYSTEMCALL_GAMER_ID }}
+    - name: create json
       id: create-json
       uses: jsdaniell/create-json@v1.2.2
       with:
