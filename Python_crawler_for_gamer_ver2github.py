@@ -211,9 +211,9 @@ try:
         #小屋/小屋統計/圖表資料
         xpath_on_web = "//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/div[@class='BH-rbox MSG-list1']/script/text()" #text()在網頁程式碼的位置(Xpath表達式)
         jscode_on_web = gamer_sourcecode.xpath(xpath_on_web)[0] #使用Xpath表達式提出，為results_on_web
-        gamer_viewnumbers = re.findall('"\d\d"', jscode_on_web) #使用正則表達式提出，為gamer_viewnumbers串列
+        gamer_viewnumbers = re.findall('"\d+"', jscode_on_web) #使用正則表達式提出，為gamer_viewnumbers串列
         for i in range(len(gamer_viewnumbers)):
-            gamer_viewnumbers[i] = re.findall("\d\d", gamer_viewnumbers[i])[0]
+            gamer_viewnumbers[i] = int(re.findall("\d+", gamer_viewnumbers[i])[0])
         gamer_dates = re.findall("\d\d\d\d..\d\d..\d\d", jscode_on_web)
         for i in range(len(gamer_dates)): #將7個日期全部由字串轉成datetime格式
             gamer_dates[i] = datetime.strptime(gamer_dates[i], "%Y\/%m\/%d")
