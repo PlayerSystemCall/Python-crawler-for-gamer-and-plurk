@@ -27,4 +27,4 @@ jobs:
         name: "google_sheets_API_key.json"
         json: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
     - name: execute python script
-      run: python Python_crawler_for_plurk_ver3github.py
+      run: python Python_crawler_main_for_plurk_ver4github.py
