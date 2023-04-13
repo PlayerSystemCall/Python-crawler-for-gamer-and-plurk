@@ -142,13 +142,13 @@ def get_ip_and_version(): #取得網際網路(外網)IP
 def nowusing_of_ip(device_ip, version): #判定IP使用狀態
     DNS_server_list = ["1.1.1.1", "208.67.222.222", "2606:4700:4700::1001", "2620:0:ccd::2"]
     if version == 4:
-        i, status, intranet_ip = 0, False, None
+        i,  i_max, status, intranet_ip = 0, 2, False, None
     elif version == 6:
-        i, status, intranet_ip = 2, False, None
-    while status == False and i < 4:
+        i, i_max, status, intranet_ip = 2, 4, False, None
+    while status == False and i < i_max:
         try:
             netlink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #UDP宣告
-            netlink.connect((DNS_server_list[i], 80)) #指定客戶端串接的ip跟Port
+            netlink.connect((DNS_server_list[i], 80)) #指定伺服器端串接的ip跟Port
             intranet_ip = netlink.getsockname()[0] #指定客戶端的ip跟Port並和伺服器連接
             netlink.close #關閉連線
             status = True
