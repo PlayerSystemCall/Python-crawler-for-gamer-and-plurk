@@ -31,7 +31,7 @@ try:
     net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
     device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
     device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
-    ip = sub_program.get_ip() #取得裝置對外的IP
+    ip = sub_program.get_ip_and_version()[0] #取得裝置對外的IP
     if ip != None:
         ip_data = sub_program.get_ip_data(ip) #查詢IP所在地資料
     code_section_1_status = "〇"
@@ -453,15 +453,15 @@ if open_googlesheets_status == True:
                 worksheet.update_value("U{}".format(number+3), net_name) #寫入裝置網路卡名稱
                 worksheet.update_value("V{}".format(number+3), device_addr_IPv4) #寫入局域網IP(IPv4)
                 worksheet.update_value("W{}".format(number+3), device_addr_IPv6) #寫入局域網IP(IPv6)
-                if sub_program.usingnow_of_ip(device_addr_IPv4) == "正在使用": #對局域網IP的不同版本進行測試
+                if sub_program.nowusing_of_ip(device_addr_IPv4, 4) == "正在使用": #對局域網IP的不同版本進行測試
                     worksheet.update_value("X{}".format(number+3), "IPv4")
-                elif sub_program.usingnow_of_ip(device_addr_IPv6) == "正在使用":
+                elif sub_program.nowusing_of_ip(device_addr_IPv6, 6) == "正在使用":
                     worksheet.update_value("X{}".format(number+3), "IPv6")
                 else:
                     worksheet.update_value("X{}".format(number+3), "None")
                 if ip != "None": #如果沒有抓到IP
                     worksheet.update_value("Y{}".format(number+3), ip) #寫入網際網路(外網)IP
-                    worksheet.update_value("Z{}".format(number+3), sub_program.type_of_ip(ip)) #寫入外網IP的種類(IPv4/IPv6)
+                    worksheet.update_value("Z{}".format(number+3), sub_program.get_ip_and_version()[1]) #寫入外網IP的種類(IPv4/IPv6)
                     worksheet.update_value("AA{}".format(number+3), str(ip_data["lat"])+"/"+str(ip_data["lon"])) #寫入外網IP的座標
                     worksheet.update_value("AB{}".format(number+3), ip_data["city"]) #寫入外網IP所在的城市
                     worksheet.update_value("AC{}".format(number+3), ip_data["region"]) #寫入外網IP所在的省級區域

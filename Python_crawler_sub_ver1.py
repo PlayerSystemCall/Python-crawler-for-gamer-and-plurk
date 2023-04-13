@@ -53,10 +53,7 @@ def go_to_web(web_URL): #測試網路連結的狀態
             web_status = Go_to_web.status_code 
             web_testtime = web_testtime + 1 #測試網路連線的次數加1
         Go_to_web.close() #關閉對web_URL夾帶headers發出GET請求
-        if web_status == 200 or web_testtime == 3: #如果網路正常或是測試網路連線3次
-            return web_status #回傳程式調整的網路狀態碼
-        else:
-            return web_status #回傳程式調整的網路狀態碼
+    return web_status #回傳程式調整的網路狀態碼
 
 def get_followday(number, start_time, i, status, startfollowdate, followday, string, endfollowdate, worksheet): #取得追蹤天數
     if status == "old": #如果狀態為old(老追蹤者)
@@ -95,23 +92,24 @@ def lastday_of_month(year, month): #取得該年該月最後一天
 
 def get_nic_data(): #取得正在使用的網路卡資料
     import psutil
-    nic_list = psutil.net_if_addrs() #取得網路連線清單
-    nic_list_status = psutil.net_if_stats() #取得網路連線狀態清單
-    for nic in nic_list: #取出其中一個網路
-        if (nic_list_status[nic].isup == True) & (len(nic_list[nic]) == 3): #如果該網路正在連線和不是Loopback Pseudo-Interface 1
-            nic_data = [nic, {"mac" : nic_list[nic][0].address,"ipv4" : nic_list[nic][1].address, "ipv6" : nic_list[nic][2].address}] #獲取該網路資訊
-    return nic_data[0], nic_data[1] #回傳網路名稱(非SSID)和其mac、ipv4和ipv6
+    ni_list = psutil.net_if_addrs() #取得網路介面清單
+    ni_list_status = psutil.net_if_stats() #取得網路介面連線狀態清單
+    for ni in ni_list: #取出其中一個網路介面
+        if (ni_list_status[ni].isup == True) & (len(ni_list[ni]) == 3): #如果該網路介面正在連線和不是Loopback Pseudo-Interface 1
+            ni_data = [ni, {"mac" : ni_list[ni][0].address,"ipv4" : ni_list[ni][1].address, "ipv6" : ni_list[ni][2].address}] #獲取該網路介面資訊
+    return ni_data[0], ni_data[1] #回傳網路類型(非SSID)和其mac、ipv4和ipv6
 
 def get_user(): #取得本機裝置使用者名稱
     import psutil
     user_list = psutil.users() #取得本機使用者
     users = [] #放置本機使用者名稱格式轉換後的串列
-    for i in list(range(0, len(user_list))): #利用本機使用者數量限定範圍
+    for i in range(0, len(user_list)): #利用本機使用者數量限定範圍
         users.append(user_list[i].name) #抽出本機使用者名稱後加入串列 
     return users, len(users) #回傳本機使用者和其人數
 
-def get_ip(): #取得網際網路(外網)IP
+def get_ip_and_version(): #取得網際網路(外網)IP
     import json
+    import ipaddress
     get_ip_link = ["http://httpbin.org/ip", "https://ifconfig.me/ip"] #查詢IP網址串列
     i = 0 #IP網址串列順序
     status = 0 #取得IP的狀態碼
@@ -122,36 +120,44 @@ def get_ip(): #取得網際網路(外網)IP
             if i == 0: #依據網址原始碼做相對應資訊之取出
                 ip = json.loads(go_to_url.text)["origin"] #將字串變成python的字典再取出相對的值
                 status = 1
-            if i == 1: #依據網址原始碼做相對應資訊之取出
+            elif i == 1: #依據網址原始碼做相對應資訊之取出
                 ip = go_to_url.text #直接取出值
                 status = 1
             go_to_url.close() #關閉與get_ip_link[i]之網址的連結
         except:
             i = i+1 #順序加1
     if ip == "": #如果上面執行失敗，將""置換成None
-        ip = None 
-    return ip #回傳外網IP
-
-def type_of_ip(ip): #網際網路通訊協定版本判定(IPv4/IPv6)
-    import ipaddress
-    try:
+        ip = None
+    try: #判定網際網路通訊協議版本
         try:
-            if ipaddress.IPv4Address(ip).version == 4:
-                return "IPv4"
+            if ipaddress.IPv4Address(str(ip)).version == 4:
+                version = "IPv4"
         except:
-            if ipaddress.IPv6Address(ip).version == 6:
-                return  "IPv6"
+            if ipaddress.IPv6Address(str(ip)).version == 6:
+                version = "IPv6"
     except:
-        return "None"
+        version = None
+    return ip, version #回傳外網IP
 
-def usingnow_of_ip(ip): #判定IP使用狀態
-    try:
-        netlink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #UDP宣告
-        netlink.connect(ip, 80) #指定客戶端串接的ip跟Port
-        netlink.getsockname()[0] #指定客戶端的ip跟Port並和伺服器連接
-        netlink.close #關閉連線
+def nowusing_of_ip(device_ip, version): #判定IP使用狀態
+    DNS_server_list = ["1.1.1.1", "208.67.222.222", "2606:4700:4700::1001", "2620:0:ccd::2"]
+    if version == 4:
+        i, status, intranet_ip = 0, False, None
+    elif version == 6:
+        i, status, intranet_ip = 2, False, None
+    while status == False and i < 4:
+        try:
+            netlink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #UDP宣告
+            netlink.connect((DNS_server_list[i], 80)) #指定客戶端串接的ip跟Port
+            intranet_ip = netlink.getsockname()[0] #指定客戶端的ip跟Port並和伺服器連接
+            netlink.close #關閉連線
+            status = True
+        except:
+            i = i+1
+            status = False
+    if intranet_ip == device_ip:
         return "正在使用"
-    except:
+    elif intranet_ip == None:
         return "非正在使用"
 
 def get_ip_data(ip): #取得網際網路IP的所在地區資料
@@ -165,5 +171,3 @@ def get_ip_data(ip): #取得網際網路IP的所在地區資料
     except: #如果上面執行失敗，執行此區
         ip_data = None
     return ip_data #回傳IP資訊
-
-
