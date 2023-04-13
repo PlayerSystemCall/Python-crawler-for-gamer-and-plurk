@@ -42,7 +42,7 @@ def go_to_web(web_URL): #測試網路連結的狀態
     import time    
     web_status = 0 #程式調整的網路狀態碼
     web_testtime = 0 #測試網路連線的次數
-    while web_status != 200 or web_testtime != 3: #當網路狀態碼等於200或測試次數達到3次時，結束迴圈
+    while web_status != 200 and web_testtime != 3: #當網路狀態碼等於200或測試次數達到3次時，結束迴圈
         headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         Go_to_web = requests.get(web_URL, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對web_URL夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
         requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
