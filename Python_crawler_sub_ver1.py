@@ -139,11 +139,11 @@ def get_ip_and_version(): #取得網際網路(外網)IP
         version = None
     return ip, version #回傳外網IP
 
-def nowusing_of_ip(device_ip, version): #判定IP使用狀態
+def nowusing_of_ip(device_ip, version): #判定內網IP使用狀態
     DNS_server_list = ["1.1.1.1", "208.67.222.222", "2606:4700:4700::1001", "2620:0:ccd::2"]
-    if version == 4:
+    if version == "ipv4":
         i,  i_max, status, intranet_ip = 0, 2, False, None
-    elif version == 6:
+    elif version == "ipv6":
         i, i_max, status, intranet_ip = 2, 4, False, None
     while status == False and i < i_max:
         try:
