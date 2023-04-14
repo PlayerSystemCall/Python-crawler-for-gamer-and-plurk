@@ -96,8 +96,8 @@ def get_nic_data(): #取得正在使用的網路卡資料
     ni_list_status = psutil.net_if_stats() #取得網路介面連線狀態清單
     for ni in ni_list: #取出其中一個網路介面
         if (ni_list_status[ni].isup == True) & (len(ni_list[ni]) == 3): #如果該網路介面正在連線和不是Loopback Pseudo-Interface 1
-            ni_data = [ni, {"mac" : ni_list[ni][0].address,"ipv4" : ni_list[ni][1].address, "ipv6" : ni_list[ni][2].address}] #獲取該網路介面資訊
-    return ni_data[0], ni_data[1] #回傳網路類型(非SSID)和其mac、ipv4和ipv6
+            ni_data = [ni, {"mac" : ni_list[ni][0].address,"ipv4" : ni_list[ni][1].address, "ipv6" : ni_list[ni][2].address}, {ni_list[ni][0].address : "mac", ni_list[ni][1].address : "ipv4", ni_list[ni][2].address : "ipv6"}] #獲取該網路介面資訊
+    return ni_data[0], ni_data[1], ni_data[2] #回傳網路類型(非SSID)和其mac、ipv4和ipv6
 
 def get_user(): #取得本機裝置使用者名稱
     import psutil
