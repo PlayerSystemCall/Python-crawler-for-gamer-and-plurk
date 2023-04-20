@@ -30,7 +30,9 @@ try:
     mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
     net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
     device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
+    print("device_addr_IPv4: ", device_addr_IPv4)
     device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
+    print("device_addr_IPv6: ", device_addr_IPv6)
     ip = sub_program.get_ip_and_version()[0] #取得裝置對外的IP
     if ip != None:
         ip_data = sub_program.get_ip_data(ip) #查詢IP所在地資料
@@ -459,6 +461,8 @@ if open_googlesheets_status == True:
                     worksheet.update_value("X{}".format(number+3), "IPv6")
                 else:
                     worksheet.update_value("X{}".format(number+3), "None")
+                print("IPv4比對結果：", sub_program.nowusing_of_ip(device_addr_IPv4, sub_program.get_nic_data()[2][device_addr_IPv4]))
+                print("IPv6比對結果：", sub_program.nowusing_of_ip(device_addr_IPv6, sub_program.get_nic_data()[2][device_addr_IPv6]))
                 if ip != "None": #如果沒有抓到IP
                     worksheet.update_value("Y{}".format(number+3), ip) #寫入網際網路(外網)IP
                     worksheet.update_value("Z{}".format(number+3), sub_program.get_ip_and_version()[1]) #寫入外網IP的種類(IPv4/IPv6)
