@@ -106,10 +106,10 @@ try:
         Go_to_gamer_follower.encoding = "utf-8" #指定網頁的編碼格式
         gamer_follower_sourcecode = etree.HTML(Go_to_gamer_follower.text) #取得網頁原始碼
         gamer_title_number = 0 #巴哈小屋大標的序號
-        status = None #表示狀態
+        status = False #表示狀態
         if gamer_follower_statuscode == 200 and version == "Old": #如果可以用舊版小屋連線
             gamer_title = list(map(str, gamer_follower_sourcecode.xpath("//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/h5/text()"))) #從巴哈小屋的原始碼篩出大標
-            while status == None and gamer_title_number < len(gamer_title): #當status等於False和gamer_title_number小於巴哈大標數量時，持續運作
+            while status == False and gamer_title_number < len(gamer_title): #當status等於False和gamer_title_number小於巴哈大標數量時，持續運作
                 if "個人紀錄" == gamer_title[gamer_title_number]:
                     xpath_on_web = "//div[@id='BH-background']/div[@id='BH-wrapper']/div[@id='BH-slave']/div[@class='BH-rbox BH-list1']/ul/li[4]/text()" #取得註冊日期
                     gamer_data_get["follower"][i]["regdate"] = str(gamer_follower_sourcecode.xpath(xpath_on_web)[0]).split("：")[1] #使用Xpath表達式提出，將帳號建立日放進regdate鍵的值
