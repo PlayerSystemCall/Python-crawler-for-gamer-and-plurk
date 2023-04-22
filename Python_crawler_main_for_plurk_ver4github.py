@@ -29,11 +29,8 @@ try:
     mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
     net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
     device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
-    print("device_addr_IPv4: ", device_addr_IPv4)
     device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
-    print("device_addr_IPv6: ", device_addr_IPv6)
     ip = sub_program.get_ip_and_version()[0] #取得裝置對外的IP
-    print("ip", sub_program.get_ip_and_version())
     if ip != None:
         ip_data = sub_program.get_ip_data(ip) #查詢IP所在地資料
     code_section_1_status = "〇"
@@ -455,13 +452,11 @@ if open_googlesheets_status == True:
                 worksheet.update_value("U{}".format(number+3), net_name) #寫入裝置網路卡名稱
                 worksheet.update_value("V{}".format(number+3), device_addr_IPv4) #寫入局域網IP(IPv4)
                 worksheet.update_value("W{}".format(number+3), device_addr_IPv6) #寫入局域網IP(IPv6)
-                print("IPv4結果：", sub_program.nowusing_of_ip(device_addr_IPv4, sub_program.get_nic_data()[2][device_addr_IPv4]))
-                print("IPv6結果：", sub_program.nowusing_of_ip(device_addr_IPv6, sub_program.get_nic_data()[2][device_addr_IPv6]))
-                if sub_program.nowusing_of_ip(device_addr_IPv4, sub_program.get_nic_data()[2][device_addr_IPv4]) == "正在使用": #對局域網IP的不同版本進行測試
+                if sub_program.get_nic_data()[3] == "IPv4": #對局域網IP的不同版本進行測試
                     worksheet.update_value("X{}".format(number+3), "IPv4")
-                elif sub_program.nowusing_of_ip(device_addr_IPv6, sub_program.get_nic_data()[2][device_addr_IPv6]) == "正在使用":
+                elif sub_program.get_nic_data()[3] == "IPv6":
                     worksheet.update_value("X{}".format(number+3), "IPv6")
-                else:
+                elif sub_program.get_nic_data()[3] == None:
                     worksheet.update_value("X{}".format(number+3), "None")
                 if ip != None: #如果沒有抓到IP
                     worksheet.update_value("Y{}".format(number+3), ip) #寫入網際網路(外網)IP
