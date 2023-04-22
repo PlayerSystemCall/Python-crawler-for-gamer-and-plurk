@@ -6,7 +6,6 @@ import socket
 import requests
 import pygsheets
 import Python_crawler_sub_ver1 as sub_program
-
 from lxml import etree
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
@@ -458,13 +457,14 @@ if open_googlesheets_status == True:
                 worksheet.update_value("W{}".format(number+3), device_addr_IPv6) #寫入局域網IP(IPv6)
                 if sub_program.nowusing_of_ip(device_addr_IPv4, sub_program.get_nic_data()[2][device_addr_IPv4]) == "正在使用": #對局域網IP的不同版本進行測試
                     worksheet.update_value("X{}".format(number+3), "IPv4")
+                    print("IPv4比對結果：", sub_program.nowusing_of_ip(device_addr_IPv4, sub_program.get_nic_data()[2][device_addr_IPv4]))
                 elif sub_program.nowusing_of_ip(device_addr_IPv6, sub_program.get_nic_data()[2][device_addr_IPv6]) == "正在使用":
                     worksheet.update_value("X{}".format(number+3), "IPv6")
+                    print("IPv4比對結果：", sub_program.nowusing_of_ip(device_addr_IPv6, sub_program.get_nic_data()[2][device_addr_IPv6]))
                 else:
                     worksheet.update_value("X{}".format(number+3), "None")
-                print("IPv4比對結果：", sub_program.nowusing_of_ip(device_addr_IPv4, sub_program.get_nic_data()[2][device_addr_IPv4]))
-                print("IPv6比對結果：", sub_program.nowusing_of_ip(device_addr_IPv6, sub_program.get_nic_data()[2][device_addr_IPv6]))
-                if ip != "None": #如果沒有抓到IP
+                    print("None")
+                if ip != None: #如果沒有抓到IP
                     worksheet.update_value("Y{}".format(number+3), ip) #寫入網際網路(外網)IP
                     worksheet.update_value("Z{}".format(number+3), sub_program.get_ip_and_version()[1]) #寫入外網IP的種類(IPv4/IPv6)
                     worksheet.update_value("AA{}".format(number+3), str(ip_data["lat"])+"/"+str(ip_data["lon"])) #寫入外網IP的座標
