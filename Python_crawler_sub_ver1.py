@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
+import json
+import pytz
+import time
+import ntplib
+import psutil
 import socket
 import requests
+import ipaddress
 from datetime import datetime, timedelta
 
 def TWtime(): #獲取台灣時間
-    import pytz
-    import ntplib
+    #import pytz
+    #import ntplib
+    #from datetime import datetime, timedelta
     timeserver = ["ntp.ntu.edu.tw", "tw.pool.ntp.org", "time.stdtime.gov.tw", "tock.stdtime.gov.tw", "watch.stdtime.gov.tw", "clock.stdtime.gov.tw", "tick.stdtime.gov.tw", "118.163.81.61", "time.windows.com", "time.google.com"] #時間伺服器網址串列
     server_number = 0 #時間伺服器網址編號(0~9)
     status = 0 #設定狀態碼為0
@@ -39,7 +46,8 @@ def TWtime(): #獲取台灣時間
     return Taipeitime, ad_year_today, mg_year_today, date_today, ad_year_yesterday, mg_year_yesterday, date_yesterday , timeserver_link, server_number #回傳一堆時間
 
 def go_to_web(web_URL): #測試網路連結的狀態
-    import time    
+    #import time
+    #import requests
     web_status = 0 #程式調整的網路狀態碼
     web_testtime = 0 #測試網路連線的次數
     while web_status != 200 and web_testtime != 3: #當網路狀態碼等於200或測試次數達到3次時，結束迴圈
@@ -56,6 +64,7 @@ def go_to_web(web_URL): #測試網路連結的狀態
     return web_status #回傳程式調整的網路狀態碼
 
 def get_followday(number, start_time, i, status, startfollowdate, followday, string, endfollowdate, worksheet): #取得追蹤天數
+    #from datetime import datetime, timedelta
     if status == "old": #如果狀態為old(老追蹤者)
         try:
             startfollowdate = datetime.strptime(startfollowdate, "%Y-%m-%d %H:%M:%S") #將開始追蹤時間轉成datetime格式
@@ -75,6 +84,7 @@ def get_followday(number, start_time, i, status, startfollowdate, followday, str
     return followday_out #回傳追蹤天數
 
 def lastday_of_month(year, month): #取得該年該月最後一天
+    #from datetime import datetime
     try:
         datetime(year, month, 31)
         return 31
@@ -91,7 +101,7 @@ def lastday_of_month(year, month): #取得該年該月最後一天
                 return 28
 
 def get_nic_data(): #取得正在使用的網路卡資料
-    import psutil
+    #import psutil
     ni_list = psutil.net_if_addrs() #取得網路介面清單
     ni_list_status = psutil.net_if_stats() #取得網路介面連線狀態清單
     for ni in ni_list: #取出其中一個網路介面
@@ -100,7 +110,7 @@ def get_nic_data(): #取得正在使用的網路卡資料
     return ni_data[0], ni_data[1], ni_data[2] #回傳網路類型(非SSID)和其mac、ipv4和ipv6
 
 def get_user(): #取得本機裝置使用者名稱
-    import psutil
+    #import psutil
     user_list = psutil.users() #取得本機使用者
     users = [] #放置本機使用者名稱格式轉換後的串列
     for i in range(0, len(user_list)): #利用本機使用者數量限定範圍
@@ -108,8 +118,9 @@ def get_user(): #取得本機裝置使用者名稱
     return users, len(users) #回傳本機使用者和其人數
 
 def get_ip_and_version(): #取得網際網路(外網)IP
-    import json
-    import ipaddress
+    #import json
+    #import requests
+    #import ipaddress
     get_ip_link = ["http://httpbin.org/ip", "https://ifconfig.me/ip"] #查詢IP網址串列
     i = 0 #IP網址串列順序
     status = 0 #取得IP的狀態碼
@@ -140,6 +151,7 @@ def get_ip_and_version(): #取得網際網路(外網)IP
     return ip, version #回傳外網IP
 
 def nowusing_of_ip(device_ip, version): #判定內網IP使用狀態
+    #import socket
     i, status, intranet_ip = 0, False, None
     if version == "ipv4":
         DNS_server_list = ["1.1.1.1", "208.67.222.222"]
@@ -161,7 +173,8 @@ def nowusing_of_ip(device_ip, version): #判定內網IP使用狀態
         return "非正在使用"
 
 def get_ip_data(ip): #取得網際網路IP的所在地區資料
-    import json
+    #import json
+    #import requests
     get_ip_data_link = "http://ip-api.com/json/{}?fields=status,message,country,countrycode,region,regionname,city,zip,lat,lon,timezone,isp,org,as,query&lang=zh-CN".format(ip) #查詢IP網址的資訊
     try:
         headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19577"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤

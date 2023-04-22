@@ -34,6 +34,7 @@ try:
     device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
     print("device_addr_IPv6: ", device_addr_IPv6)
     ip = sub_program.get_ip_and_version()[0] #取得裝置對外的IP
+    print("ip", ip)
     if ip != None:
         ip_data = sub_program.get_ip_data(ip) #查詢IP所在地資料
     code_section_1_status = "〇"
