@@ -1,11 +1,7 @@
-name: get_plurk_data
+name: test_packages
 
 on:
-  schedule:
-    - cron: '00 16 * * *'
   workflow_dispatch: 
-env: 
-  PLAYER_SYSTEMCALL_PLURK_ID: ${{ secrets.PLAYER_SYSTEMCALL_PLURK_ID }}
 jobs:
   run_python_file:
     runs-on: windows-latest
@@ -20,12 +16,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r docs/package.txt
-    - name: create json
-      id: create-json
-      uses: jsdaniell/create-json@v1.2.2
-      with:
-        name: "google_sheets_API_key.json"
-        json: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
     - name: execute python script
       run: |
-        python Python_crawler_main_for_plurk_ver4github.py
+        python test_packages.py
