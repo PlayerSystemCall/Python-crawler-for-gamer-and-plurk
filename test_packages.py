@@ -95,3 +95,15 @@ try:
     print("success to import ipaddress")
 except:
     print("fail to import ipaddress")
+
+try:
+    Player_SystemCall_gamer_id = os.getenv('PLAYER_SYSTEMCALL_GAMER_ID')
+    print("success to import Player_SystemCall_gamer_id")
+except:
+    print("fail to import Player_SystemCall_gamer_id")
+
+try:
+    Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
+    print("success to import Player_SystemCall_plurk_id")
+except:
+    print("fail to import Player_SystemCall_plurk_id")   
