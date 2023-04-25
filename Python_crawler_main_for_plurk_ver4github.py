@@ -174,7 +174,7 @@ try:
 except:
     code_section_4_status = "✕"
     print("4-X")
-
+"""
 try:
     #開啟試算表
     certificate = pygsheets.authorize(service_file='.\google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
@@ -502,3 +502,4 @@ if open_googlesheets_status == True:
     worksheet.update_value("O{}".format(number+3), code_section_7_status) #寫入程式運作狀態 #系統訊息寫入
     worksheet.update_value("H{}".format(number+3), str(sub_program.TWtime()[0]).split(" ")[1].split("+")[0]) #寫入程式執行的時間
     worksheet.update_value("G{}".format(number+3), str(sub_program.TWtime()[0]-start_time)) #寫入程式結束的時間
+"""
