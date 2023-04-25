@@ -59,7 +59,7 @@ date_today = start_timecall[3] #今天現在台北時區的西元日期
 ad_year_yesterday = start_timecall[4] #台北時區的西元紀年
 mg_year_yesterday = start_timecall[5] #台北時區的民國紀年
 date_yesterday = start_timecall[6] #昨天台北時區的西元日期
-"""
+
 try:    
     #取得裝置資訊
     device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
@@ -76,7 +76,7 @@ try:
 except:
     code_section_1_status = "✕"
     print("1-X")
-
+"""
 try:
     #取得巴哈小屋網頁原始碼，找到資料的的html區塊，取出資料
     gamer_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(Player_SystemCall_gamer_id) #巴哈小屋網址
