@@ -1,15 +1,54 @@
 # -*- coding: utf-8 -*-
-import os
-import re
-import socket
-import requests
-import pygsheets
-import Python_crawler_sub_ver1 as sub_program
-from lxml import etree
-from dotenv import load_dotenv
-from datetime import datetime, timedelta
-
-Player_SystemCall_gamer_id = os.getenv('PLAYER_SYSTEMCALL_GAMER_ID')
+try:
+    import os
+    print("O import os")
+except:
+    print("X import os")
+try:    
+    import re
+    print("O import re")
+except:
+    print("X import re")
+try:    
+    import socket
+    print("O import socket")
+except:
+    print("X import socket")
+try:    
+    import requests
+    print("O import requests")
+except:
+    print("X import requests")
+try:    
+    import pygsheets
+    print("O import pygsheets")
+except:
+    print("X import pygsheets")
+try:
+    import Python_crawler_sub_ver1 as sub_program
+    print("O import Python_crawler_sub_ver1")
+except:
+    print("X import Python_crawler_sub_ver1")
+try:
+    from lxml import etree
+    print("O from lxml")
+except:
+    print("X from lxml")
+try:
+    from dotenv import load_dotenv
+    print("O from dotenv")
+except:
+    print("X from dotenv")
+try:
+    from datetime import datetime, timedelta
+    print("O from datetime")
+except:
+    print("X from datetime")
+try:
+    Player_SystemCall_gamer_id = os.getenv('PLAYER_SYSTEMCALL_GAMER_ID')
+    print("O import Player_SystemCall_gamer_id")
+except:
+    print("X import Player_SystemCall_gamer_id")
 
 #取得起始時間
 start_timecall = sub_program.TWtime() #呼叫副程式TWtime()獲取時間
@@ -20,7 +59,7 @@ date_today = start_timecall[3] #今天現在台北時區的西元日期
 ad_year_yesterday = start_timecall[4] #台北時區的西元紀年
 mg_year_yesterday = start_timecall[5] #台北時區的民國紀年
 date_yesterday = start_timecall[6] #昨天台北時區的西元日期
-
+"""
 try:    
     #取得裝置資訊
     device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
@@ -531,3 +570,4 @@ if open_googlesheets_status == True:
     worksheet.update_value("O{}".format(number+3), code_section_7_status) #寫入程式運作狀態 #系統訊息寫入
     worksheet.update_value("H{}".format(number+3), str(sub_program.TWtime()[0]).split(" ")[1].split("+")[0]) #寫入程式執行的時間
     worksheet.update_value("G{}".format(number+3), str(sub_program.TWtime()[0]-start_time)) #寫入程式結束的時間
+"""
