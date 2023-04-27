@@ -103,8 +103,12 @@ try:
     print("O device_user")
 except:
     print("X device_user")
-"""
+try:
     mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
+    print("O mac_adderss")
+except:
+    print("X mac_adderss")
+"""
     net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
     device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
     device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
