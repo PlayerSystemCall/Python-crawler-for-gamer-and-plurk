@@ -105,6 +105,7 @@ except:
     print("X device_user")
 try:
     mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
+    print(sub_program.get_nic_data())
     print("O mac_adderss")
 except:
     print("X mac_adderss")
