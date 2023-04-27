@@ -56,9 +56,13 @@ try:
 except:
     print("X import Player_SystemCall_plurk_id")
 
-
 #取得起始時間
-start_timecall = sub_program.TWtime() #呼叫副程式TWtime()獲取時間
+try:
+    start_timecall = sub_program.TWtime() #呼叫副程式TWtime()獲取時間
+    print("O start_timecall")
+except:
+    print("X start_timecall")
+"""
 start_time = start_timecall[0] #取得程式開始的時間
 ad_year_today = start_timecall[1] #台北時區的西元紀年
 mg_year_today = start_timecall[2] #台北時區的民國紀年
@@ -69,53 +73,21 @@ date_yesterday = start_timecall[6] #昨天台北時區的西元日期
 
 try:
     #取得裝置資訊
-    try:
-        device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
-        print("O device_name")
-    except:
-        print("X device_name")
-    try:
-        device_user = sub_program.get_user() #裝置使用者名稱和數量
-        print("O device_user")
-    except:
-        print("X device_user")
-    try:
-        mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
-        print("O mac_adderss")
-    except:
-        print("X mac_adderss")
-    try:
-        net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
-        print("O net_name")
-    except:
-        print("X net_name")
-    try:
-        device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
-        print("O device_addr_IPv4")
-    except:
-        print("X device_addr_IPv4")
-    try:
-        device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
-        print("O device_addr_IPv6")
-    except:
-        print("X device_addr_IPv6")
-    try:
-        ip = sub_program.get_ip_and_version()[0] #取得裝置對外的IP
-        print("O ip")
-    except:
-        print("X ip")
-    try:
-        if ip != None:
-            ip_data = sub_program.get_ip_data(ip) #查詢IP所在地資料
-        code_section_1_status = "〇"
-        print("O ip_data")
-    except:
-        print("X ip_data")
+    device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
+    device_user = sub_program.get_user() #裝置使用者名稱和數量
+    mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
+    net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
+    device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
+    device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
+    ip = sub_program.get_ip_and_version()[0] #取得裝置對外的IP
+    if ip != None:
+        ip_data = sub_program.get_ip_data(ip) #查詢IP所在地資料
+    code_section_1_status = "〇"
     print("1-O")
 except:
     code_section_1_status = "✕"
     print("1-X")
-"""
+
 try:
     #取得噗浪網頁原始碼，找到資料的的html區塊，取出資料
     plurk_url = "https://www.plurk.com/Player_SystemCall" #噗浪個人頁面
