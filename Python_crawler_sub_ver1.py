@@ -109,36 +109,7 @@ def get_nic_data(): #取得正在使用的網路卡資料
     for ni in ni_list: #取出其中一個網路介面
         if (ni_list_status[ni].isup == True) & (len(ni_list[ni]) == 3): #如果該網路介面正在連線和不是Loopback Pseudo-Interface 1
             ni_data = [ni, {"mac" : ni_list[ni][0].address,"ipv4" : ni_list[ni][1].address, "ipv6" : ni_list[ni][2].address}, {ni_list[ni][0].address : "mac", ni_list[ni][1].address : "ipv4", ni_list[ni][2].address : "ipv6"}] #獲取該網路介面資訊
-    try:
-        while nowusing == None and ip_version < 8:
-            i, status, intranet_ip = 0, False, None
-            device_ip = ni_data[1]["ipv{}".format(ip_version)]
-            if ip_version == 4:
-                DNS_server_list = ["1.1.1.1", "208.67.222.222"]
-            elif ip_version == 6:
-                DNS_server_list = ["2606:4700:4700::1001", "2620:0:ccd::2"]
-            while status == False and i < len(DNS_server_list):
-                try:
-                    netlink = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) #UDP宣告
-                    netlink.connect((DNS_server_list[i], 80)) #指定伺服器端串接的ip跟Port
-                    intranet_ip = netlink.getsockname()[0] #指定客戶端的ip跟Port並和伺服器連接
-                    netlink.close #關閉連線
-                    status = True
-                except:
-                    i = i+1
-                    status = False
-            if intranet_ip == device_ip and ip_version == 4:
-                nowusing = "IPv4"
-                ip_version = ip_version+2
-            elif intranet_ip == device_ip and ip_version == 6:
-                nowusing = "IPv6"
-                ip_version = ip_version+2
-            elif intranet_ip == None:
-                nowusing = None
-                ip_version = ip_version+2
-    except:
-        nowusing = None
-    return ni_data[0], ni_data[1], ni_data[2], nowusing #回傳網路類型(非SSID)、其mac、ipv4和ipv6、正在使用的內網板本
+    return ni_data[0], ni_data[1], ni_data[2] #回傳網路類型(非SSID)、其mac、ipv4和ipv6、正在使用的內網板本
 
 def get_user(): #取得本機裝置使用者名稱
     #import psutil
