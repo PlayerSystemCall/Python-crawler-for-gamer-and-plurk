@@ -62,15 +62,42 @@ try:
     print("O start_timecall")
 except:
     print("X start_timecall")
+try:
+    start_time = start_timecall[0] #取得程式開始的時間
+    print("O start_time")
+except:
+    print("X start_time")
+try:
+    ad_year_today = start_timecall[1] #台北時區的西元紀年
+    print("O ad_year_today")
+except:
+    print("X ad_year_today")
+try:
+    mg_year_today = start_timecall[2] #台北時區的民國紀年
+    print("O mg_year_today")
+except:
+    print("X mg_year_today")
+try:
+    date_today = start_timecall[3] #今天現在台北時區的西元日期
+    print("O date_today")
+except:
+    print("X date_today")
+try:
+    ad_year_yesterday = start_timecall[4] #台北時區的西元紀年
+    print("O ad_year_yesterday")
+except:
+    print("X ad_year_yesterday")
+try:
+    mg_year_yesterday = start_timecall[5] #台北時區的民國紀年
+    print("O mg_year_yesterday")
+except:
+    print("O mg_year_yesterday")
+try:
+    date_yesterday = start_timecall[6] #昨天台北時區的西元日期
+    print("O date_yesterday")
+except:
+    print("X date_yesterday")
 """
-start_time = start_timecall[0] #取得程式開始的時間
-ad_year_today = start_timecall[1] #台北時區的西元紀年
-mg_year_today = start_timecall[2] #台北時區的民國紀年
-date_today = start_timecall[3] #今天現在台北時區的西元日期
-ad_year_yesterday = start_timecall[4] #台北時區的西元紀年
-mg_year_yesterday = start_timecall[5] #台北時區的民國紀年
-date_yesterday = start_timecall[6] #昨天台北時區的西元日期
-
 try:
     #取得裝置資訊
     device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
