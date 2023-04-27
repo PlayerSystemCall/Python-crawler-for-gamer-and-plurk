@@ -97,10 +97,14 @@ try:
     print("O date_yesterday")
 except:
     print("X date_yesterday")
-"""
+
 try:
     #取得裝置資訊
     device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
+    print("O device_name")
+except:
+    print("X device_name")
+"""
     device_user = sub_program.get_user() #裝置使用者名稱和數量
     mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
     net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
