@@ -93,23 +93,24 @@ except:
     print("X date_yesterday")
 
 try:
-    #取得裝置資訊
-    device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
-    print("O device_name")
-except:
-    print("X device_name")
-try:
-    device_user = sub_program.get_user() #裝置使用者名稱和數量
-    print("O device_user")
-except:
-    print("X device_user")
-try:
-    mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
-    print(sub_program.get_nic_data())
-    print("O mac_adderss")
-except:
-    print("X mac_adderss")
-"""
+    try:
+        #取得裝置資訊
+        device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
+        print("O device_name")
+    except:
+        print("X device_name")
+    try:
+        device_user = sub_program.get_user() #裝置使用者名稱和數量
+        print("O device_user")
+    except:
+        print("X device_user")
+    try:
+        mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
+        print(sub_program.get_nic_data())
+        print("O mac_adderss")
+    except:
+        print("X mac_adderss")
+
     net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
     device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
     device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
