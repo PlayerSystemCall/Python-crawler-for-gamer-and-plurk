@@ -1,122 +1,32 @@
 # -*- coding: utf-8 -*-
-try:
-    import os
-    print("O import os")
-except:
-    print("X import os")
-try:    
-    import re
-    print("O import re")
-except:
-    print("X import re")
-try:
-    import json
-    print("O import json")
-except:
-    print("X import json")
-try:    
-    import socket
-    print("O import socket")
-except:
-    print("X import socket")
-try:    
-    import requests
-    print("O import requests")
-except:
-    print("X import requests")
-try:    
-    import pygsheets
-    print("O import pygsheets")
-except:
-    print("X import pygsheets")
-try:
-    import Python_crawler_sub_ver1 as sub_program
-    print("O import Python_crawler_sub_ver1")
-except:
-    print("X import Python_crawler_sub_ver1")
-try:
-    from lxml import etree
-    print("O from lxml")
-except:
-    print("X from lxml")
-try:
-    from dotenv import load_dotenv
-    print("O from dotenv")
-except:
-    print("X from dotenv")
-try:
-    from datetime import datetime, timedelta
-    print("O from datetime")
-except:
-    print("X from datetime")
+import os
+import re
+import json
+import socket
+import requests
+import pygsheets
+import Python_crawler_sub_ver1 as sub_program
+from lxml import etree
+from dotenv import load_dotenv
+from datetime import datetime, timedelta
 
-try:
-    Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
-    print("O import Player_SystemCall_plurk_id")
-except:
-    print("X import Player_SystemCall_plurk_id")
+Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
 
 #取得起始時間
-try:
-    start_timecall = sub_program.TWtime() #呼叫副程式TWtime()獲取時間
-    print("O start_timecall")
-except:
-    print("X start_timecall")
-try:
-    start_time = start_timecall[0] #取得程式開始的時間
-    print("O start_time")
-except:
-    print("X start_time")
-try:
-    ad_year_today = start_timecall[1] #台北時區的西元紀年
-    print("O ad_year_today")
-except:
-    print("X ad_year_today")
-try:
-    mg_year_today = start_timecall[2] #台北時區的民國紀年
-    print("O mg_year_today")
-except:
-    print("X mg_year_today")
-try:
-    date_today = start_timecall[3] #今天現在台北時區的西元日期
-    print("O date_today")
-except:
-    print("X date_today")
-try:
-    ad_year_yesterday = start_timecall[4] #台北時區的西元紀年
-    print("O ad_year_yesterday")
-except:
-    print("X ad_year_yesterday")
-try:
-    mg_year_yesterday = start_timecall[5] #台北時區的民國紀年
-    print("O mg_year_yesterday")
-except:
-    print("O mg_year_yesterday")
-try:
-    date_yesterday = start_timecall[6] #昨天台北時區的西元日期
-    print("O date_yesterday")
-except:
-    print("X date_yesterday")
+start_timecall = sub_program.TWtime() #呼叫副程式TWtime()獲取時間
+start_time = start_timecall[0] #取得程式開始的時間
+ad_year_today = start_timecall[1] #台北時區的西元紀年
+mg_year_today = start_timecall[2] #台北時區的民國紀年
+date_today = start_timecall[3] #今天現在台北時區的西元日期
+ad_year_yesterday = start_timecall[4] #台北時區的西元紀年
+mg_year_yesterday = start_timecall[5] #台北時區的民國紀年
+date_yesterday = start_timecall[6] #昨天台北時區的西元日期
 
 try:
-    try:
-        #取得裝置資訊
-        device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
-        print("O device_name")
-    except:
-        print("X device_name")
-    try:
-        device_user = sub_program.get_user() #裝置使用者名稱和數量
-        print("O device_user")
-    except:
-        print("X device_user")
-    try:
-        mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
-        print(sub_program.get_nic_data())
-        print("O mac_adderss")
-    except:
-        print("X mac_adderss")
-
+    #取得裝置資訊
+    device_name = socket.getfqdn(socket.gethostname()).split(".")[0] #裝置名稱，從DNS連線網址中擷取第1段
+    device_user = sub_program.get_user() #裝置使用者名稱和數量
+    mac_adderss = sub_program.get_nic_data()[1]["mac"] #裝置網路卡號碼
     net_name = sub_program.get_nic_data()[0] #裝置網路卡名稱
     device_addr_IPv4 = sub_program.get_nic_data()[1]["ipv4"] #IPv4位址(內網IP)
     device_addr_IPv6 = sub_program.get_nic_data()[1]["ipv6"] #IPv6位址(內網IP)
