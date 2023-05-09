@@ -463,7 +463,7 @@ if open_googlesheets_status == True:
             else:
                 worksheet.update_value("B{}".format(number+3), date_number+1) #寫入天數+1
                 worksheet.update_value("C{}".format(number+3), "1") #寫入天次數為1
-            worksheet.update_value("D{}".format(number+3), "get_plurk_code(Python)") #寫入現在執行的檔案
+            worksheet.update_value("D{}".format(number+3), "get_gamer_data(Python)") #寫入現在執行的檔案
             worksheet.update_value("E{}".format(number+3), str(start_time).split(" ")[0].split("+")[0]) #寫入現在的時間
             worksheet.update_value("F{}".format(number+3), str(start_time).split(" ")[1].split("+")[0]) #寫入程式開始的時間
             worksheet.update_value("I{}".format(number+3), code_section_1_status) #寫入程式運作狀態 #裝置基本資訊取得
