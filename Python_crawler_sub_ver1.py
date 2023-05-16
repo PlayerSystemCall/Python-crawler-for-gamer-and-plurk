@@ -8,6 +8,7 @@ import psutil
 import socket
 import requests
 import ipaddress
+from fake_useragent import UserAgent
 from datetime import datetime, timedelta
 
 def TWtime(): #獲取台灣時間
@@ -49,10 +50,11 @@ def TWtime(): #獲取台灣時間
 def go_to_web(web_URL): #測試網路連結的狀態
     #import time
     #import requests
+    #from fake_useragent import UserAgent
     web_status = 0 #程式調整的網路狀態碼
     web_testtime = 0 #測試網路連線的次數
     while web_status != 200 and web_testtime != 3: #當網路狀態碼等於200或測試次數達到3次時，結束迴圈
-        headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+        headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         Go_to_web = requests.get(web_URL, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對web_URL夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
         requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
         if Go_to_web.status_code != 200: #如果網路狀態碼不等於200
@@ -130,12 +132,13 @@ def get_ip_and_version(): #取得網際網路(外網)IP
     #import json
     #import requests
     #import ipaddress
+    #from fake_useragent import UserAgent
     get_ip_link = ["http://httpbin.org/ip", "https://ifconfig.me/ip"] #查詢IP網址串列
     i = 0 #IP網址串列順序
     status = 0 #取得IP的狀態碼
     while i < 2 and status != 1: #當順序小於2和狀態碼等於0時，持續運作
         try:
-            headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19577"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+            headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
             go_to_url = requests.get(get_ip_link[i], headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對get_ip_link[i]的網址夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能
             if i == 0: #依據網址原始碼做相對應資訊之取出
                 ip = json.loads(go_to_url.text)["origin"] #將字串變成python的字典再取出相對的值
@@ -162,9 +165,10 @@ def get_ip_and_version(): #取得網際網路(外網)IP
 def get_ip_data(ip): #取得網際網路IP的所在地區資料
     #import json
     #import requests
+    #from fake_useragent import UserAgent
     get_ip_data_link = "http://ip-api.com/json/{}?fields=status,message,country,countrycode,region,regionname,city,zip,lat,lon,timezone,isp,org,as,query&lang=zh-CN".format(ip) #查詢IP網址的資訊
     try:
-        headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19577"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+        headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         go_to_url = requests.get(get_ip_data_link, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對get_ip_link[i]的網址夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能
         ip_data = json.loads(go_to_url.text) #將字串變成python的字典
         go_to_url.close() #關閉

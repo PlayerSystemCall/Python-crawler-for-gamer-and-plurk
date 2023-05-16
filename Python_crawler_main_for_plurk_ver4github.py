@@ -8,6 +8,7 @@ import pygsheets
 import Python_crawler_sub_ver1 as sub_program
 from lxml import etree
 from dotenv import load_dotenv
+from fake_useragent import UserAgent
 from datetime import datetime, timedelta
 
 Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
@@ -41,7 +42,7 @@ try:
     #取得噗浪網頁原始碼，找到資料的的html區塊，取出資料
     plurk_url = "https://www.plurk.com/Player_SystemCall" #噗浪個人頁面
     plurk_statuscode = sub_program.go_to_web(plurk_url) #回傳網路狀態碼
-    headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19577"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+    headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
     Go_to_plurk = requests.get(plurk_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對plurk_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
     requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
     if plurk_statuscode == 200: #如果連線狀態正常
@@ -67,7 +68,7 @@ plurk_data_get = {"fan" : {}, "friend" : {}, "other" : {}} #建立字典，並�
 try:
     #取得噗浪粉絲名單網頁原始碼，找到資料的的html區塊，取出資料
     plurk_fanlist_url = "https://www.plurk.com/Friends/getFansByOffset" #噗浪的粉絲名單請求網址
-    headers = {"User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+    headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
     data = {"user_id": Player_SystemCall_plurk_id, "offset":"0", "limit": "10000000"} #夾帶資料，個人ID、offset和單次送出來的人數
     Go_to_plurk_fanlist = requests.post(plurk_fanlist_url, headers = headers, data = data, timeout = 60, allow_redirects = False, stream = True, verify = False) #對plurk_fanlist_url夾帶headers和data發出POST請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
     requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
@@ -89,7 +90,7 @@ try:
         plurk_data_get["fan"][i]["displayname"] = plurk_data_get["other"]["plurk_fan_displaynamelist"][i]
         plurk_fan_url = "https://www.plurk.com/{}".format(plurk_data_get["fan"][i]["account"]) #組合成噗浪粉絲的個人網址
         plurk_fan_statuscode = sub_program.go_to_web(plurk_fan_url) #回傳狀態碼
-        headers = {"User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+        headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         Go_to_plurk_fan = requests.get(plurk_fan_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對plurk_fan_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
         requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
         Go_to_plurk_fan.encoding = "utf-8" #指定網頁的編碼格式
@@ -118,7 +119,7 @@ except:
 try:
     #取得噗浪朋友名單網頁原始碼，找到資料的的html區塊，取出資料
     plurk_friendlist_url = "https://www.plurk.com/Friends/getFriendsByOffset" #噗浪的朋友名單請求網址
-    headers = {"User-Agent" : "Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+    headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
     data = {"user_id": Player_SystemCall_plurk_id, "offset":"0", "limit": "10000000"} #夾帶資料，個人ID、offset和單次送出來的人數
     Go_to_plurk_friendlist = requests.post(plurk_friendlist_url, headers = headers, data = data,timeout = 60, allow_redirects = False, stream = True, verify = False) #對plurk_friendlist_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
     requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
@@ -140,7 +141,7 @@ try:
         plurk_data_get["friend"][i]["displayname"] = plurk_data_get["other"]["plurk_friend_displaynamelist"][i]
         plurk_friend_url = "https://www.plurk.com/{}".format(plurk_data_get["friend"][i]["account"]) #組合成噗浪朋友的個人網址
         plurk_friend_statuscode = sub_program.go_to_web(plurk_friend_url) #回傳狀態碼
-        headers = {"User-Agent" : "Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201"} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
+        headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         Go_to_plurk_friend = requests.get(plurk_friend_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對plurk_friend_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
         requests.packages.urllib3.disable_warnings() #關閉InsecureRequestWarning的顯示
         Go_to_plurk_friend.encoding = "utf-8" #指定網頁的編碼格式
