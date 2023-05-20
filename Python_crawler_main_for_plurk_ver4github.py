@@ -189,7 +189,10 @@ if open_googlesheets_status == True:
         days = list(set(days)) #將days串列中重複的元素變成1個再組成一個新的days串列
         date_number = len(days) #天數為days元素的數量
         
-        runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
+        try:
+            runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
+        except:
+            runtime = 0
         basic_status = True
     except:
         basic_status = False
@@ -202,21 +205,37 @@ if open_googlesheets_status == True:
             while worksheet.get_value("A{}".format(writesit)) != "": #一直運作直到得到的字串為「完全空白」
                 writesit = writesit+1
             
-            if str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_yesterday+date_yesterday, "%Y年%m月%d日")): #如果最後一天的日期等於「昨天的台北時間」
-                plurk_writesit = writesit-1 #噗浪資料被寫下的格數
-            elif str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_today+date_today, "%Y年%m月%d日")): #如果最後一天的日期等於「今天的台北時間」
-                plurk_writesit = writesit-2 #噗浪資料被寫下的格數
+            if writesit > 3 and str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_yesterday+date_yesterday, "%Y年%m月%d日")): #噗浪資料被寫下的格數 #如果最後一天的日期等於「昨天的台北時間」
+                plurk_writesit = writesit-1
+            elif writesit > 3 and str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_today+date_today, "%Y年%m月%d日")): #如果最後一天的日期等於「今天的台北時間」
+                plurk_writesit = writesit-2
+            elif writesit == 3 and worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)) == "西元紀年日期":
+                plurk_writesit = writesit
             
-            month_lastday = sub_program.lastday_of_month(int(worksheet.get_value("A{}".format(writesit-2)).split("年")[0]), int(worksheet.get_value("C{}".format(writesit-2)).split("月")[0])) #取得該月最後一天的日期
+            if plurk_writesit != writesit: #取得該月最後一天的日期
+                month_lastday = sub_program.lastday_of_month(int(worksheet.get_value("A{}".format(writesit-2)).split("年")[0]), int(worksheet.get_value("C{}".format(writesit-2)).split("月")[0]))
+            else:
+                month_lastday = sub_program.lastday_of_month(int(ad_year_yesterday.split("年")[0]), int(date_yesterday.split("月")[0]))
             
-            plurk_yesterday_viewnum = plurk_allview_number_yesterday-int(worksheet.get_value("M{}".format(plurk_writesit-1))) #用昨天全部的噗浪瀏覽數減前天全部的噗浪瀏覽數為昨天單日的瀏覽數
-            if str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) != str(datetime.strptime(ad_year_today+date_today, "%Y年%m月%d日")): #如果最後一天的日期不等於今天的日期
-                worksheet.update_value("A{}".format(writesit-1), ad_year_yesterday) #寫入昨日的西元紀年
-                worksheet.update_value("B{}".format(writesit-1), mg_year_yesterday) #寫入昨日的民國紀年
-                worksheet.update_value("C{}".format(writesit-1), date_yesterday) #寫入昨日的日期
-                worksheet.update_value("A{}".format(writesit), ad_year_today) #寫入今日的西元紀年
-                worksheet.update_value("B{}".format(writesit), mg_year_today) #寫入今日的民國紀年
-                worksheet.update_value("C{}".format(writesit), date_today) #寫入今日的日期
+            try:
+                plurk_yesterday_viewnum = plurk_allview_number_yesterday-int(worksheet.get_value("M{}".format(plurk_writesit-1))) #用昨天全部的噗浪瀏覽數減前天全部的噗浪瀏覽數為昨天單日的瀏覽數
+            except:
+                plurk_yesterday_viewnum = plurk_allview_number_yesterday
+            if plurk_writesit != writesit:
+                if str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) != str(datetime.strptime(ad_year_today+date_today, "%Y年%m月%d日")): #如果最後一天的日期不等於今天的日期
+                    worksheet.update_value("A{}".format(writesit-1), ad_year_yesterday) #寫入昨日的西元紀年
+                    worksheet.update_value("B{}".format(writesit-1), mg_year_yesterday) #寫入昨日的民國紀年
+                    worksheet.update_value("C{}".format(writesit-1), date_yesterday) #寫入昨日的日期
+                    worksheet.update_value("A{}".format(writesit), ad_year_today) #寫入今日的西元紀年
+                    worksheet.update_value("B{}".format(writesit), mg_year_today) #寫入今日的民國紀年
+                    worksheet.update_value("C{}".format(writesit), date_today) #寫入今日的日期
+            elif plurk_writesit == writesit:
+                worksheet.update_value("A{}".format(writesit), ad_year_yesterday) #寫入昨日的西元紀年
+                worksheet.update_value("B{}".format(writesit), mg_year_yesterday) #寫入昨日的民國紀年
+                worksheet.update_value("C{}".format(writesit), date_yesterday) #寫入昨日的日期
+                worksheet.update_value("A{}".format(writesit+1), ad_year_today) #寫入今日的西元紀年
+                worksheet.update_value("B{}".format(writesit+1), mg_year_today) #寫入今日的民國紀年
+                worksheet.update_value("C{}".format(writesit+1), date_today) #寫入今日的日期
             if str(datetime.strptime(worksheet.get_value("A{}".format(plurk_writesit))+worksheet.get_value("C{}".format(plurk_writesit)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_yesterday+date_yesterday, "%Y年%m月%d日")): #如果試算表上所寫的「昨天的日期」等於「ad_year+date_yesterday」
                 worksheet.update_value("J{}".format(plurk_writesit), plurk_friend_number) #寫入噗浪好友人數
                 worksheet.update_value("K{}".format(plurk_writesit), plurk_fan_number) #寫入噗浪粉絲人數
@@ -310,7 +329,7 @@ if open_googlesheets_status == True:
                         plurk_data_new["fan"][plurk_fan_number_new]["displayname"] = plurk_data_get["fan"][i]["displayname"]
                         plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_get["fan"][i]["regdate"]
                         plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_get["fan"][i]["lastondate"]
-                        plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #以昨天為開始追蹤日
+                        plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
                         plurk_data_new["fan"][plurk_fan_number_new]["followday"] = 0 #第0天
                         plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = "" #結束時間為空白
                         plurk_fan_number_new = plurk_fan_number_new+1
@@ -366,10 +385,10 @@ if open_googlesheets_status == True:
                     if plurk_data_get["friend"][i]["account"] not in plurk_data_last["other"]["plurk_friend_accountlist"]: #如果從噗浪取得的朋友account的值沒有在串列裡
                         plurk_data_new["friend"][plurk_friend_number_new]["status"] = "new" #標記狀態為new
                         plurk_data_new["friend"][plurk_friend_number_new]["account"] = plurk_data_get["friend"][i]["account"] #將從噗浪取得的朋友account、displayname、建立日和最後上線日記錄進plurk_data_new
-                        plurk_data_new["friend"][plurk_friend_number_new]["displaynamee"] = plurk_data_get["friend"][i]["displayname"]
+                        plurk_data_new["friend"][plurk_friend_number_new]["displayname"] = plurk_data_get["friend"][i]["displayname"]
                         plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][i]["regdate"]
                         plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][i]["lastondate"]
-                        plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #以昨天為開始追蹤日
+                        plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
                         plurk_data_new["friend"][plurk_friend_number_new]["followday"] = 0 #第0天
                         plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] =  "" #結束時間為空白
                         plurk_friend_number_new = plurk_friend_number_new+1

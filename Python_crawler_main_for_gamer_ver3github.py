@@ -39,7 +39,7 @@ except:
 
 try:
     #取得巴哈小屋網頁原始碼，找到資料的的html區塊，取出資料
-    gamer_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(Player_SystemCall_gamer_id) #巴哈小屋網址
+    gamer_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(Player_SystemCall_gamer_id) #巴哈小屋網址，雲端版本
     gamer_statuscode = sub_program.go_to_web(gamer_url) #回傳網路狀態碼
     headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
     Go_to_gamer = requests.get(gamer_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對gamer_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
@@ -218,7 +218,10 @@ if open_googlesheets_status == True:
         days = list(set(days)) #將days串列中重複的元素變成1個再組成一個新的days串列
         date_number = len(days) #天數為days元素的數量
         
-        runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
+        try:
+            runtime = int(worksheet.get_value("A{}".format(number+2))) #獲取運作次數，number+2為「完全空白」前一格的位置
+        except:
+            runtime = 0
         basic_status = True
     except:
         basic_status = False
@@ -231,21 +234,34 @@ if open_googlesheets_status == True:
             while worksheet.get_value("A{}".format(writesit)) != "": #一直運作直到得到的字串為「完全空白」
                 writesit = writesit+1
             
-            if str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_yesterday+date_yesterday, "%Y年%m月%d日")): #如果最後一天的日期等於「昨天的台北時間」
-                gamer_writesit = writesit-1 #巴哈資料被寫下的格數
-            elif str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_today+date_today, "%Y年%m月%d日")): #如果最後一天的日期等於「今天的台北時間」
-                gamer_writesit = writesit-2 #巴哈資料被寫下的格數
+            if writesit > 3 and str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_yesterday+date_yesterday, "%Y年%m月%d日")): #噗浪資料被寫下的格數 #如果最後一天的日期等於「昨天的台北時間」
+                gamer_writesit = writesit-1
+            elif writesit > 3 and str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_today+date_today, "%Y年%m月%d日")): #如果最後一天的日期等於「今天的台北時間」
+                gamer_writesit = writesit-2
+            elif writesit == 3 and worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)) == "西元紀年日期":
+                gamer_writesit = writesit
             
-            month_lastday = sub_program.lastday_of_month(int(worksheet.get_value("A{}".format(writesit-2)).split("年")[0]), int(worksheet.get_value("C{}".format(writesit-2)).split("月")[0])) #取得該月最後一天的日期
+            if gamer_writesit != writesit: #取得該月最後一天的日期
+                month_lastday = sub_program.lastday_of_month(int(worksheet.get_value("A{}".format(writesit-2)).split("年")[0]), int(worksheet.get_value("C{}".format(writesit-2)).split("月")[0]))
+            else:
+                month_lastday = sub_program.lastday_of_month(int(ad_year_yesterday.split("年")[0]), int(date_yesterday.split("月")[0]))
             
             gamer_yesterday_allview = "=394+SUM($F$3:F{})".format(gamer_writesit) #計算到昨天為止的巴哈總人氣數
-            if worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)) != ad_year_today+date_today: #如果最後一天的日期不等於今天的日期
-                worksheet.update_value("A{}".format(writesit-1), ad_year_yesterday) #寫入昨日的西元紀年
-                worksheet.update_value("B{}".format(writesit-1), mg_year_yesterday) #寫入昨日的民國紀年
-                worksheet.update_value("C{}".format(writesit-1), date_yesterday) #寫入昨日的日期
-                worksheet.update_value("A{}".format(writesit), ad_year_today) #寫入今日的西元紀年
-                worksheet.update_value("B{}".format(writesit), mg_year_today) #寫入今日的民國紀年
-                worksheet.update_value("C{}".format(writesit), date_today) #寫入今日的日期
+            if gamer_writesit != writesit:
+                if worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)) != ad_year_today+date_today: #如果最後一天的日期不等於今天的日期
+                    worksheet.update_value("A{}".format(writesit-1), ad_year_yesterday) #寫入昨日的西元紀年
+                    worksheet.update_value("B{}".format(writesit-1), mg_year_yesterday) #寫入昨日的民國紀年
+                    worksheet.update_value("C{}".format(writesit-1), date_yesterday) #寫入昨日的日期
+                    worksheet.update_value("A{}".format(writesit), ad_year_today) #寫入今日的西元紀年
+                    worksheet.update_value("B{}".format(writesit), mg_year_today) #寫入今日的民國紀年
+                    worksheet.update_value("C{}".format(writesit), date_today) #寫入今日的日期
+            elif gamer_writesit == writesit:
+                worksheet.update_value("A{}".format(writesit), ad_year_yesterday) #寫入昨日的西元紀年
+                worksheet.update_value("B{}".format(writesit), mg_year_yesterday) #寫入昨日的民國紀年
+                worksheet.update_value("C{}".format(writesit), date_yesterday) #寫入昨日的日期
+                worksheet.update_value("A{}".format(writesit+1), ad_year_today) #寫入今日的西元紀年
+                worksheet.update_value("B{}".format(writesit+1), mg_year_today) #寫入今日的民國紀年
+                worksheet.update_value("C{}".format(writesit+1), date_today) #寫入今日的日期
             if str(datetime.strptime(worksheet.get_value("A{}".format(gamer_writesit))+worksheet.get_value("C{}".format(gamer_writesit)), "%Y年%m月%d日")) == str(gamer_dates[6]): #如果試算表上所寫的「昨天的日期」等於「ad_year+date_yesterday」
                 worksheet.update_value("D{}".format(gamer_writesit), gamer_friend_number) #寫入巴哈好友圈人數
                 worksheet.update_value("E{}".format(gamer_writesit), gamer_follower_number) #寫入巴哈追蹤者人數
@@ -339,7 +355,7 @@ if open_googlesheets_status == True:
                         gamer_data_new["follower"][gamer_follower_number_new]["nickname"] = gamer_data_get["follower"][i]["nickname"]
                         gamer_data_new["follower"][gamer_follower_number_new]["regdate"] = gamer_data_get["follower"][i]["regdate"]
                         gamer_data_new["follower"][gamer_follower_number_new]["lastondate"] = gamer_data_get["follower"][i]["lastondate"]
-                        gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #以昨天為開始追蹤日
+                        gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
                         gamer_data_new["follower"][gamer_follower_number_new]["followday"] = 0 #第0天
                         gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = "" #結束時間為空白
                         gamer_follower_number_new = gamer_follower_number_new+1
@@ -398,7 +414,7 @@ if open_googlesheets_status == True:
                         gamer_data_new["friend"][gamer_friend_number_new]["nickname"] = gamer_data_get["friend"][i]["nickname"]
                         gamer_data_new["friend"][gamer_friend_number_new]["regdate"] = gamer_data_get["friend"][i]["regdate"]
                         gamer_data_new["friend"][gamer_friend_number_new]["lastondate"] = gamer_data_get["friend"][i]["lastondate"]
-                        gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #以昨天為開始追蹤日
+                        gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
                         gamer_data_new["friend"][gamer_friend_number_new]["followday"] = 0 #第0天
                         gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] =  "" #結束時間為空白
                         gamer_friend_number_new = gamer_friend_number_new+1
