@@ -9,7 +9,7 @@ import Python_crawler_sub_ver1 as sub_program
 from lxml import etree
 from dotenv import load_dotenv
 from fake_useragent import UserAgent
-from datetime import datetime, timedelta
+from datetime import datetime
 
 Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
 
@@ -330,7 +330,7 @@ if open_googlesheets_status == True:
                         plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_get["fan"][i]["regdate"]
                         plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_get["fan"][i]["lastondate"]
                         plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
-                        plurk_data_new["fan"][plurk_fan_number_new]["followday"] = 0 #第0天
+                        plurk_data_new["fan"][plurk_fan_number_new]["followday"] = "0日0時0分0秒" #第0天
                         plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = "" #結束時間為空白
                         plurk_fan_number_new = plurk_fan_number_new+1
                     else:
@@ -389,7 +389,7 @@ if open_googlesheets_status == True:
                         plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][i]["regdate"]
                         plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][i]["lastondate"]
                         plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
-                        plurk_data_new["friend"][plurk_friend_number_new]["followday"] = 0 #第0天
+                        plurk_data_new["friend"][plurk_friend_number_new]["followday"] = "0日0時0分0秒" #第0天
                         plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] =  "" #結束時間為空白
                         plurk_friend_number_new = plurk_friend_number_new+1
                     else:

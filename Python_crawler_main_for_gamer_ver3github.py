@@ -8,7 +8,7 @@ import Python_crawler_sub_ver1 as sub_program
 from lxml import etree
 from dotenv import load_dotenv
 from fake_useragent import UserAgent
-from datetime import datetime, timedelta
+from datetime import datetime
 
 Player_SystemCall_gamer_id = os.getenv('PLAYER_SYSTEMCALL_GAMER_ID')
 
@@ -356,7 +356,7 @@ if open_googlesheets_status == True:
                         gamer_data_new["follower"][gamer_follower_number_new]["regdate"] = gamer_data_get["follower"][i]["regdate"]
                         gamer_data_new["follower"][gamer_follower_number_new]["lastondate"] = gamer_data_get["follower"][i]["lastondate"]
                         gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
-                        gamer_data_new["follower"][gamer_follower_number_new]["followday"] = 0 #第0天
+                        gamer_data_new["follower"][gamer_follower_number_new]["followday"] = "0日0時0分0秒" #第0天
                         gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = "" #結束時間為空白
                         gamer_follower_number_new = gamer_follower_number_new+1
                     else:
@@ -415,7 +415,7 @@ if open_googlesheets_status == True:
                         gamer_data_new["friend"][gamer_friend_number_new]["regdate"] = gamer_data_get["friend"][i]["regdate"]
                         gamer_data_new["friend"][gamer_friend_number_new]["lastondate"] = gamer_data_get["friend"][i]["lastondate"]
                         gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
-                        gamer_data_new["friend"][gamer_friend_number_new]["followday"] = 0 #第0天
+                        gamer_data_new["friend"][gamer_friend_number_new]["followday"] = "0日0時0分0秒" #第0天
                         gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] =  "" #結束時間為空白
                         gamer_friend_number_new = gamer_friend_number_new+1
                     else:

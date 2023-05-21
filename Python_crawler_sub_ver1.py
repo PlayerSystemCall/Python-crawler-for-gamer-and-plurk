@@ -72,18 +72,20 @@ def get_followday(number, start_time, i, status, startfollowdate, followday, str
         try:
             startfollowdate = datetime.strptime(startfollowdate, "%Y-%m-%d %H:%M:%S") #將開始追蹤時間轉成datetime格式
             today_date = datetime.strptime(str(start_time).split(".")[0], "%Y-%m-%d %H:%M:%S") #將程式開始執行的時間start_time取出年月日
-            followday_out = (str(today_date-startfollowdate).split(" days,")[0]+"日 ")+(str(today_date-startfollowdate).split("days, ")[1].split(":")[0])+"時"+(str(today_date-startfollowdate).split("days, ")[1].split(":")[1])+"分"+(str(today_date-startfollowdate).split("days, ")[1].split(":")[2])+"秒" #時間相減等於追蹤時間
+            if "days," in str(today_date-startfollowdate): #時間相減等於追蹤時間
+                followday_out = (str(today_date-startfollowdate).split(" days,")[0]+"日")+(str(today_date-startfollowdate).split("days, ")[1].split(":")[0])+"時"+(str(today_date-startfollowdate).split("days, ")[1].split(":")[1])+"分"+(str(today_date-startfollowdate).split("days, ")[1].split(":")[2])+"秒"
+            elif "day," in str(today_date-startfollowdate):
+                followday_out = (str(today_date-startfollowdate).split(" day,")[0]+"日")+(str(today_date-startfollowdate).split("day, ")[1].split(":")[0])+"時"+(str(today_date-startfollowdate).split("day, ")[1].split(":")[1])+"分"+(str(today_date-startfollowdate).split("day, ")[1].split(":")[2])+"秒"
         except:
             startfollowdate = "{}{}".format(string, i) #來源字串(gamer/plurk;friend/followerfan)加編號
             if str(start_time).split(" ")[0] == str(worksheet.get_value("E{}".format(number+2))): #start_time的日期等於傳入工作表（追蹤名單）("D{}".format(number+1))的字串
                 followday_out = followday 
             else:
-                followday_plus = timedelta(days=int(followday.split("日 ")[0]), seconds=(((int(followday.split("日")[1].split("時")[0])*60)+(int(followday.split("日")[1].split("時")[1].split("分")[0])))*60)+(int(followday.split("日")[1].split("時")[1].split("分")[1].split("秒")[0])))+timedelta(days=1) #追蹤日加1
-                followday_out = (str(followday_plus).split(" days,")[0]+"日 ")+(str(followday_plus).split("days, ")[1].split(":")[0])+"時"+(str(followday_plus).split("days, ")[1].split(":")[1])+"分"+(str(followday_plus).split("days, ")[1].split(":")[2])+"秒"
+                followday_out = timedelta(days=int(followday.split("日")[0]), seconds=(((int(followday.split("日")[1].split("時")[0])*60)+(int(followday.split("日")[1].split("時")[1].split("分")[0])))*60)+(int(followday.split("日")[1].split("時")[1].split("分")[1].split("秒")[0])))+timedelta(days=1) #追蹤日加1
     else: #如果狀態為leave(退追蹤者)
         startfollowdate = datetime.strptime(startfollowdate, "%Y-%m-%d %H:%M:%S") #將開始追蹤時間轉成datetime格式
         end_date = endfollowdate #結束時間
-        followday_out = (str(end_date-startfollowdate).split(" days,")[0]+"日 ")+(str(end_date-startfollowdate).split("days, ")[1].split(":")[0])+"時"+(str(end_date-startfollowdate).split("days, ")[1].split(":")[1])+"分"+(str(end_date-startfollowdate).split("days, ")[1].split(":")[2])+"秒" #時間相減等於追蹤時間
+        followday_out = (str(end_date-startfollowdate).split(" days,")[0]+"日")+(str(end_date-startfollowdate).split("days, ")[1].split(":")[0])+"時"+(str(end_date-startfollowdate).split("days, ")[1].split(":")[1])+"分"+(str(end_date-startfollowdate).split("days, ")[1].split(":")[2])+"秒" #時間相減等於追蹤時間
     return followday_out #回傳追蹤天數
 
 def lastday_of_month(year, month): #取得該年該月最後一天
