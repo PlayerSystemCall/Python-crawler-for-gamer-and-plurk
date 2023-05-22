@@ -82,6 +82,10 @@ def get_followday(number, start_time, i, status, startfollowdate, followday, str
                 followday_out = followday 
             else:
                 followday_out = timedelta(days=int(followday.split("日")[0]), seconds=(((int(followday.split("日")[1].split("時")[0])*60)+(int(followday.split("日")[1].split("時")[1].split("分")[0])))*60)+(int(followday.split("日")[1].split("時")[1].split("分")[1].split("秒")[0])))+timedelta(days=1) #追蹤日加1
+                if "days," in str(followday_out): #時間相減等於追蹤時間
+                    followday_out = (str(followday_out).split(" days,")[0]+"日")+(str(followday_out).split("days, ")[1].split(":")[0])+"時"+(str(followday_out).split("days, ")[1].split(":")[1])+"分"+(str(followday_out).split("days, ")[1].split(":")[2])+"秒"
+                elif "day," in str(followday_out):
+                    followday_out = (str(followday_out).split(" day,")[0]+"日")+(str(followday_out).split("day, ")[1].split(":")[0])+"時"+(str(followday_out).split("day, ")[1].split(":")[1])+"分"+(str(followday_out).split("day, ")[1].split(":")[2])+"秒"
     else: #如果狀態為leave(退追蹤者)
         startfollowdate = datetime.strptime(startfollowdate, "%Y-%m-%d %H:%M:%S") #將開始追蹤時間轉成datetime格式
         end_date = endfollowdate #結束時間
