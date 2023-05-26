@@ -244,9 +244,9 @@ if open_googlesheets_status == True:
             basic_status = False
             times_basic = times_basic+1
     
-    code_section_5_status, time_5 = "✕", 0
-    while code_section_5_status == "✕" and time_5 < 3:
-        if basic_status == True:
+    if basic_status == True:
+        code_section_5_status, time_5 = "✕", 0
+        while code_section_5_status == "✕" and time_5 < 3:
             try: #寫入試算表1："人氣紀錄"
                 worksheet = open_googlesheets.worksheet('id', 0) #以sheetId定位試算表位置為第1張的"人氣紀錄表"
                 
@@ -369,15 +369,15 @@ if open_googlesheets_status == True:
                     except:
                         del gamer_data_new["follower"][gamer_follower_number_new] #如果從巴哈取得的追蹤者account的值沒有在串列裡，刪除以gamer_follower_number_new為名的鍵
                 
-                for i in range(len(gamer_data_get["follower"])): #範圍為follower鍵的值(字典)內所含有的數量
+                for j in range(len(gamer_data_get["follower"])): #範圍為follower鍵的值(字典)內所含有的數量
                     gamer_data_new["follower"][gamer_follower_number_new] = {} #以gamer_follower_number_new為鍵建立對應的值，此值為字典
                     try:
-                        if gamer_data_get["follower"][i]["account"] not in gamer_data_last["other"]["gamer_follower_accountlist"]: #如果從巴哈取得的追蹤者account的值沒有在串列裡
+                        if gamer_data_get["follower"][j]["account"] not in gamer_data_last["other"]["gamer_follower_accountlist"]: #如果從巴哈取得的追蹤者account的值沒有在串列裡
                             gamer_data_new["follower"][gamer_follower_number_new]["status"] = "new" #標記狀態為new
-                            gamer_data_new["follower"][gamer_follower_number_new]["account"] = gamer_data_get["follower"][i]["account"] #將從巴哈取得的粉絲account、nickname、建立日和最後上線日記錄進gamer_data_new
-                            gamer_data_new["follower"][gamer_follower_number_new]["nickname"] = gamer_data_get["follower"][i]["nickname"]
-                            gamer_data_new["follower"][gamer_follower_number_new]["regdate"] = gamer_data_get["follower"][i]["regdate"]
-                            gamer_data_new["follower"][gamer_follower_number_new]["lastondate"] = gamer_data_get["follower"][i]["lastondate"]
+                            gamer_data_new["follower"][gamer_follower_number_new]["account"] = gamer_data_get["follower"][j]["account"] #將從巴哈取得的粉絲account、nickname、建立日和最後上線日記錄進gamer_data_new
+                            gamer_data_new["follower"][gamer_follower_number_new]["nickname"] = gamer_data_get["follower"][j]["nickname"]
+                            gamer_data_new["follower"][gamer_follower_number_new]["regdate"] = gamer_data_get["follower"][j]["regdate"]
+                            gamer_data_new["follower"][gamer_follower_number_new]["lastondate"] = gamer_data_get["follower"][j]["lastondate"]
                             gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
                             gamer_data_new["follower"][gamer_follower_number_new]["followday"] = "0日0時0分0秒" #第0天
                             gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = "" #結束時間為空白
@@ -387,21 +387,21 @@ if open_googlesheets_status == True:
                     except:
                         del gamer_data_new["follower"][gamer_follower_number_new] #如果從巴哈取得的追蹤者account的值沒有在串列裡，刪除以gamer_follower_number_new為名的鍵
                 
-                for i in range(len(gamer_data_get["follower"])): #範圍為follower鍵的值(字典)內所含有的數量
+                for k in range(len(gamer_data_last["follower"])): #範圍為follower鍵的值(字典)內所含有的數量
                     gamer_data_new["follower"][gamer_follower_number_new] = {} #以gamer_follower_number_new為鍵建立對應的值，此值為字典
                     try:
-                        if gamer_data_last["follower"][i]["account"] not in gamer_data_get["other"]["gamer_follower_accountlist"]: #如果從試算表取得的追蹤者account的值沒有在串列裡
+                        if gamer_data_last["follower"][k]["account"] not in gamer_data_get["other"]["gamer_follower_accountlist"]: #如果從試算表取得的追蹤者account的值沒有在串列裡
                             gamer_data_new["follower"][gamer_follower_number_new]["status"] = "leave" #標記狀態為leave
-                            gamer_data_new["follower"][gamer_follower_number_new]["account"] = gamer_data_get["follower"]["account"][i] #將從巴哈取得的粉絲account、nickname、建立日和最後上線日記錄進gamer_data_new
-                            gamer_data_new["follower"][gamer_follower_number_new]["nickname"] = gamer_data_get["follower"]["nickname"][i]
-                            gamer_data_new["follower"][gamer_follower_number_new]["regdate"] = gamer_data_get["follower"]["regdate"][i]
-                            gamer_data_new["follower"][gamer_follower_number_new]["lastondate"] = gamer_data_get["follower"]["lastondate"][i]
+                            gamer_data_new["follower"][gamer_follower_number_new]["account"] = gamer_data_last["follower"][k]["account"] #將從巴哈取得的粉絲account、nickname、建立日和最後上線日記錄進gamer_data_new
+                            gamer_data_new["follower"][gamer_follower_number_new]["nickname"] = gamer_data_last["follower"][k]["nickname"]
+                            gamer_data_new["follower"][gamer_follower_number_new]["regdate"] = gamer_data_last["follower"][k]["regdate"]
+                            gamer_data_new["follower"][gamer_follower_number_new]["lastondate"] = gamer_data_last["follower"][k]["lastondate"]
                             gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"] = gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
                             if gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["endfollowdate"] == "": #如果日期等於空白
-                                gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
+                                gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #登記昨天為結束追蹤的日期
                             else: #如果日期不等於空白
-                                gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["fan"][gamer_follower_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                            gamer_data_new["follower"][gamer_follower_number_new]["followday"] = sub_program.get_followday(number, start_time, i, gamer_data_new["follower"][gamer_follower_number_new]["status"], gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"], gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["followday"], gamer_follower_string, gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                                gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"] = gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
+                            gamer_data_new["follower"][gamer_follower_number_new]["followday"] = sub_program.get_followday(number, start_time, k, gamer_data_new["follower"][gamer_follower_number_new]["status"], gamer_data_new["follower"][gamer_follower_number_new]["startfollowdate"], gamer_data_last["follower"][gamer_data_last["other"]["gamer_follower_accountlist"].index(gamer_data_new["follower"][gamer_follower_number_new]["account"])]["followday"], gamer_follower_string, gamer_data_new["follower"][gamer_follower_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                             gamer_follower_number_new = gamer_follower_number_new+1
                         else:
                             del gamer_data_new["follower"][gamer_follower_number_new] #如果從巴哈取得的追蹤者account的值沒有在串列裡，刪除以gamer_follower_number_new為名的鍵
@@ -428,15 +428,15 @@ if open_googlesheets_status == True:
                     except:
                         del gamer_data_new["friend"][gamer_friend_number_new] #如果從巴哈取得的朋友account的值沒有在串列裡，刪除以gamer_friend_number_new為名的鍵
                 
-                for i in range(len(gamer_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
+                for j in range(len(gamer_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
                     gamer_data_new["friend"][gamer_friend_number_new] = {} #以gamer_friend_number_new為鍵建立對應的值，此值為字典
                     try:
                         if gamer_data_get["friend"][i]["account"] not in gamer_data_last["other"]["gamer_friend_accountlist"]: #如果從巴哈取得的朋友account的值有不在串列裡
                             gamer_data_new["friend"][gamer_friend_number_new]["status"] = "new" #標記狀態為new
-                            gamer_data_new["friend"][gamer_friend_number_new]["account"] = gamer_data_get["friend"][i]["account"] #將從巴哈取得的朋友account、nickname、建立日和最後上線日記錄進gamer_data_new
-                            gamer_data_new["friend"][gamer_friend_number_new]["nickname"] = gamer_data_get["friend"][i]["nickname"]
-                            gamer_data_new["friend"][gamer_friend_number_new]["regdate"] = gamer_data_get["friend"][i]["regdate"]
-                            gamer_data_new["friend"][gamer_friend_number_new]["lastondate"] = gamer_data_get["friend"][i]["lastondate"]
+                            gamer_data_new["friend"][gamer_friend_number_new]["account"] = gamer_data_get["friend"][j]["account"] #將從巴哈取得的朋友account、nickname、建立日和最後上線日記錄進gamer_data_new
+                            gamer_data_new["friend"][gamer_friend_number_new]["nickname"] = gamer_data_get["friend"][j]["nickname"]
+                            gamer_data_new["friend"][gamer_friend_number_new]["regdate"] = gamer_data_get["friend"][j]["regdate"]
+                            gamer_data_new["friend"][gamer_friend_number_new]["lastondate"] = gamer_data_get["friend"][j]["lastondate"]
                             gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
                             gamer_data_new["friend"][gamer_friend_number_new]["followday"] = "0日0時0分0秒" #第0天
                             gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] =  "" #結束時間為空白
@@ -446,22 +446,21 @@ if open_googlesheets_status == True:
                     except:
                         del gamer_data_new["friend"][gamer_friend_number_new] #如果從巴哈取得的朋友account的值沒有在串列裡，刪除以gamer_friend_number_new為名的鍵
                 
-                for i in range(len(gamer_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
+                for k in range(len(gamer_data_last["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
                     gamer_data_new["friend"][gamer_friend_number_new] = {} #以gamer_friend_number_new為鍵建立對應的值，此值為字典
                     try:
                         if gamer_data_last["friend"][i]["account"] not in gamer_data_get["other"]["gamer_friend_accountlist"]: #如果從試算表取得的朋友account的值沒有在串列裡
                             gamer_data_new["friend"][gamer_friend_number_new]["status"] = "leave" #標記狀態為leave
-                            gamer_data_new["friend"][gamer_friend_number_new]["account"] = gamer_data_get["friend"][i]["account"] #將從巴哈取得的朋友account、nickname、建立日和最後上線日記錄進gamer_data_new
-                            gamer_data_new["friend"][gamer_friend_number_new]["nickname"] = gamer_data_get["friend"][i]["nickname"]
-                            gamer_data_new["friend"][gamer_friend_number_new]["regdate"] = gamer_data_get["friend"][i]["regdate"]
-                            gamer_data_new["friend"][gamer_friend_number_new]["lastondate"] = gamer_data_get["friend"][i]["lastondate"]
+                            gamer_data_new["friend"][gamer_friend_number_new]["account"] = gamer_data_last["friend"][k]["account"] #將從巴哈取得的朋友account、nickname、建立日和最後上線日記錄進gamer_data_new
+                            gamer_data_new["friend"][gamer_friend_number_new]["nickname"] = gamer_data_last["friend"][k]["nickname"]
+                            gamer_data_new["friend"][gamer_friend_number_new]["regdate"] = gamer_data_last["friend"][k]["regdate"]
+                            gamer_data_new["friend"][gamer_friend_number_new]["lastondate"] = gamer_data_last["friend"][k]["lastondate"]
                             gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"] = gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                            
                             if gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["endfollowdate"] == "": #如果日期等於空白
-                                gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
+                                gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #登記昨天為結束追蹤的日期
                             else: #如果日期不等於空白
                                 gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"] = gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                            gamer_data_new["friend"][gamer_friend_number_new]["followday"] = sub_program.get_followday(number, start_time, i, gamer_data_new["friend"][gamer_friend_number_new]["status"], gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"], gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["followday"], gamer_friend_string, gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                            gamer_data_new["friend"][gamer_friend_number_new]["followday"] = sub_program.get_followday(number, start_time, k, gamer_data_new["friend"][gamer_friend_number_new]["status"], gamer_data_new["friend"][gamer_friend_number_new]["startfollowdate"], gamer_data_last["friend"][gamer_data_last["other"]["gamer_friend_accountlist"].index(gamer_data_new["friend"][gamer_friend_number_new]["account"])]["followday"], gamer_friend_string, gamer_data_new["friend"][gamer_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
                             gamer_friend_number_new = gamer_friend_number_new+1
                         else:
                             del gamer_data_new["friend"][gamer_friend_number_new] #如果從巴哈取得的朋友account的值沒有在串列裡，刪除以gamer_friend_number_new為名的鍵
@@ -539,18 +538,6 @@ if open_googlesheets_status == True:
             except:
                 code_section_7_status = "✕"
                 time_7 = time_7+1
-        """
-        worksheet.update_value("A{}".format(number+3), runtime+1) #寫入本次的運作次數
-        if str(start_time).split(" ")[0] == str(worksheet.get_value("E{}".format(number+2))): #start_time的日期等於("D{}".format(number+1))的字串
-            worksheet.update_value("B{}".format(number+3), date_number) #寫入同樣天數
-            worksheet.update_value("C{}".format(number+3), int(worksheet.get_value("C{}".format(number+2)))+1) #取得前一格的天次數後加1再寫入
-        else:
-            worksheet.update_value("B{}".format(number+3), date_number+1) #寫入天數+1
-            worksheet.update_value("C{}".format(number+3), "1") #寫入天次數為1
-            worksheet.update_value("D{}".format(number+3), "get_plurk_code(Python)") #寫入現在執行的檔案
-            worksheet.update_value("E{}".format(number+3), str(start_time).split(" ")[0].split("+")[0]) #寫入現在的時間
-            worksheet.update_value("F{}".format(number+3), str(start_time).split(" ")[1].split("+")[0]) #寫入程式開始的時間
-        """
     worksheet.update_value("O{}".format(number+3), code_section_7_status) #寫入程式運作狀態 #系統訊息寫入
     worksheet.update_value("H{}".format(number+3), str(sub_program.TWtime()[0]).split(" ")[1].split("+")[0]) #寫入程式執行的時間
     worksheet.update_value("G{}".format(number+3), str(sub_program.TWtime()[0]-start_time)) #寫入程式結束的時間
