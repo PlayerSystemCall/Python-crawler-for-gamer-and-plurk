@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from fake_useragent import UserAgent
 from datetime import datetime
 
+load_dotenv()
 Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
 
 #取得起始時間

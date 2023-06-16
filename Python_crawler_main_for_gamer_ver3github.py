@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from fake_useragent import UserAgent
 from datetime import datetime
 
+load_dotenv()
 Player_SystemCall_gamer_id = os.getenv('PLAYER_SYSTEMCALL_GAMER_ID')
 
 #取得起始時間
