@@ -551,6 +551,8 @@ if open_googlesheets_status == True:
                 code_section_6C_status = "✕"
                 time_6C = time_6C+1
         if code_section_6A_status == "〇" and code_section_6B_status == "〇" and code_section_6C_status=="〇":
+            code_section_6_status = "〇"
+        else:
             code_section_6_status = "✕"
         
         code_section_7_status, time_7 = "✕", 0
