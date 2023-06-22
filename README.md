@@ -8,7 +8,7 @@ Get the data from account homepages of Gamer(巴哈姆特) and Plurk(噗浪) and
 │├說明文件.txt  
 │├說明文件.md  
 │├tree.txt  
-│├**.env(social network accounts' id, name and googlesheets url)**  
+│├**Environment File(.env)(social network accounts' id, name and googlesheets url)**  
 │└**google_sheets_API_key.json**  
 ├副程式Subprogram  
 │└**Python_crawler_subprogram_ver1.py**  
@@ -27,9 +27,8 @@ Get the data from account homepages of Gamer(巴哈姆特) and Plurk(噗浪) and
 ├必要文件Necessary Documents  
 │├.gitignore  
 │├.gitattributes  
-│├.env.example(the example of social network accounts' id, name and googlesheets url  
-│├README.md  
-│├**.env(social network accounts' id, name and googlesheets url Only in Github Secret)**  
+│├**Environment File(.env.example)(The text in .env is put in Github Secret.)  
+│├README.md    
 │└**google_sheets_API_key.json(Only in Github Secret)**  
 ├自動化執行 Automation Run  
 │├**get_gamer_data.yml**  
@@ -46,18 +45,18 @@ study_web_data_ver0.py
 │├study_plurk_data_ver2.py  
 ││└study_plurk_data_ver3.py=c.n.=>Python_crawler_for_plurk_ver3.py  
 ││　├Python_crawler_for_plurk_ver3github.py  
-││　└**Python_crawler_main_for_plurk_ver4.py**  
+││　└Python_crawler_main_for_plurk_ver4.py  
 ││　　├Python_crawler_main_for_plurk_ver4github.py  
 ││　　└**Python_crawler_main_for_plurk_ver5.py**  
 │└study_gamer_data_ver1.py  
 │　└study_gamer_data_ver2.py=c.n.=>Python_crawler_for_gamer_ver2.py  
 │　　├Python_crawler_for_gamer_ver2github.py  
-│　　└**Python_crawler_main_for_gamer_ver3.py**  
+│　　└Python_crawler_main_for_gamer_ver3.py  
 │　　　├Python_crawler_main_for_gamer_ver3github.py  
 │　　　└**Python_crawler_main_for_gamer_ver4.py**  
 └──Python_crawler_for_plurk_ver3.py and Python_crawler_for_gamer_ver2.py  
 　　├Player_SystemCall_account.py  
-　　│└**.env**
+　　│└**Environment File(.env)**  
 　　└**Python_crawler_sub_ver1.py**  
 ## 備註Annotation
  1. I have a repository of code in my local machine(a computer). If I want to upload some changes, I copy file from project folder of repository, and then paste file in Giyhub\project-folder.   
