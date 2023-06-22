@@ -350,8 +350,8 @@ if open_googlesheets_status == True:
                 code_section_5_status = "✕"
                 time_5 = time_5+1
         
-        code_section_6_status, time_6 = "✕", 0
-        while code_section_6_status == "✕" and time_6 < 3:
+        code_section_6A_status, time_6A = "✕", 0
+        while code_section_6A_status == "✕" and time_6A < 3:
             try:
                 #寫入試算表2："巴哈追蹤名單"
                 worksheet = open_googlesheets.worksheet('id', 1960934836) #以sheetId定位試算表位置為"巴哈姆特追蹤名單"
@@ -390,7 +390,14 @@ if open_googlesheets_status == True:
                     gamer_data_last["other"]["gamer_friend_accountlist"].append(gamer_data_last["friend"][gamer_friend_number_last]["account"]) #將account這個鍵的值加入串列
                     gamer_data_last["other"]["gamer_friend_nicknamelist"].append(gamer_data_last["friend"][gamer_friend_number_last]["nickname"]) #將nickname這個鍵的值加入串列
                     gamer_friend_number_last = gamer_friend_number_last+1
+                code_section_6A_status = "〇"
+            except:
+                code_section_6A_status = "✕"
+                time_6A = time_6A+1
                 
+        code_section_6B_status, time_6B = "✕", 0
+        while code_section_6B_status == "✕" and time_6B < 3:
+            try:    
                 gamer_data_new = {"follower" : {}, "friend" : {}} #建立字典，並在裡面建立fan、friena和other3鍵，功能為放置從噗浪取得(昨天)的資料
                     #account為巴哈帳戶，nickname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"account" : [], "nickname" :[], "regdate" : [], "lastondate" : []
                 
@@ -511,7 +518,14 @@ if open_googlesheets_status == True:
                             del gamer_data_new["friend"][gamer_friend_number_new] #如果從巴哈取得的朋友account的值沒有在串列裡，刪除以gamer_friend_number_new為名的鍵
                     except:
                         del gamer_data_new["friend"][gamer_friend_number_new] #如果從巴哈取得的朋友account的值沒有在串列裡，刪除以gamer_friend_number_new為名的鍵
-                
+                code_section_6B_status = "〇"
+            except:
+                code_section_6B_status = "✕"
+                time_6B = time_6B+1
+            
+        code_section_6C_status, time_6C = "✕", 0
+        while code_section_6C_status == "✕" and time_6C < 3:
+            try:
                 for l in range(3, (max(gamer_follower_number_last, gamer_friend_number_last)+4)):
                     worksheet.update_values("B{}".format(l), [["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
                 
@@ -532,10 +546,12 @@ if open_googlesheets_status == True:
                     worksheet.update_value("M{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["startfollowdate"]) #寫入開始追蹤日期
                     worksheet.update_value("N{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["followday"]) #寫入追蹤天數
                     worksheet.update_value("O{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["endfollowdate"]) #寫入結束追蹤日期
-                code_section_6_status = "〇"
+                code_section_6C_status = "〇"
             except:
-                code_section_6_status = "✕"
-                time_6 = time_6+1
+                code_section_6C_status = "✕"
+                time_6C = time_6C+1
+        if code_section_6A_status == "〇" and code_section_6B_status == "〇" and code_section_6C_status=="〇":
+            code_section_6_status = "✕"
         
         code_section_7_status, time_7 = "✕", 0
         while code_section_7_status == "✕" and time_7 < 3:

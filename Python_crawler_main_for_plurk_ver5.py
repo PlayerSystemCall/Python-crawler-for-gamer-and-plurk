@@ -324,8 +324,8 @@ if open_googlesheets_status == True:
                 code_section_5_status = "✕"
                 time_5 = time_5+1
             
-        code_section_6_status, time_6 = "✕", 0
-        while code_section_6_status == "✕" and time_6 < 3:
+        code_section_6A_status, time_6A = "✕", 0
+        while code_section_6A_status == "✕" and time_6A < 3:
             try:
                 #寫入試算表3："噗浪追蹤名單"
                 worksheet = open_googlesheets.worksheet('id', 1068388458) #以sheetId定位試算表位置為"噗浪追蹤名單"
@@ -364,7 +364,14 @@ if open_googlesheets_status == True:
                     plurk_data_last["other"]["plurk_friend_accountlist"].append(plurk_data_last["friend"][plurk_friend_number_last]["account"]) #將account這個鍵的值加入串列
                     plurk_data_last["other"]["plurk_friend_displaynamelist"].append(plurk_data_last["friend"][plurk_friend_number_last]["displayname"]) #將displayname這個鍵的值加入串列
                     plurk_friend_number_last = plurk_friend_number_last+1
+                code_section_6A_status = "〇"
+            except:
+                code_section_6A_status = "✕"
+                time_6A = time_6A+1
                 
+        code_section_6B_status, time_6B = "✕", 0
+        while code_section_6B_status == "✕" and time_6B < 3:
+            try:
                 plurk_data_new = {"fan" : {}, "friend" : {}} #建立字典，並在裡面建立fan、friena和other3鍵，功能為放置經過比對後，今天要寫入試算表的(昨天)資料
                     #id為噗浪ID，account為噗浪nick_name噗浪帳號，displayname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"id" : [], "account" : [], "displayname" :[], "regdate" : [], "lastondate" : []
                 
@@ -486,7 +493,14 @@ if open_googlesheets_status == True:
                             del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
                     except:
                         del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
+                code_section_6B_status = "〇"
+            except:
+                code_section_6B_status = "✕"
+                time_6B = time_6B+1
                 
+        code_section_6C_status, time_6C = "✕", 0
+        while code_section_6C_status == "✕" and time_6C < 3:
+            try:
                 for l in range(3, (max(plurk_fan_number_last, plurk_friend_number_last)+4)):
                     worksheet.update_values("B{}".format(l), [["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
                 
@@ -507,10 +521,12 @@ if open_googlesheets_status == True:
                     worksheet.update_value("M{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["startfollowdate"]) #寫入開始追蹤日期
                     worksheet.update_value("N{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["followday"]) #寫入追蹤天數
                     worksheet.update_value("O{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["endfollowdate"]) #寫入結束追蹤日期
-                code_section_6_status = "〇"
+                code_section_6C_status = "〇"
             except:
-                code_section_6_status = "✕"
-                time_6 = time_6+1
+                code_section_6C_status = "✕"
+                time_6C = time_6C+1
+        if code_section_6A_status == "〇" and code_section_6B_status == "〇" and code_section_6C_status=="〇":
+            code_section_6_status = "✕"
         
         code_section_7_status, time_7 = "✕", 0
         while code_section_7_status == "✕" and time_7 < 3:
