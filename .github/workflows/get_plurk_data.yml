@@ -6,6 +6,7 @@ on:
   workflow_dispatch: 
 env: 
   PLAYER_SYSTEMCALL_PLURK_ID: ${{ secrets.PLAYER_SYSTEMCALL_PLURK_ID }}
+  GOOGLESHEETS_URL: ${{ secrets.GOOGLESHEETS_URL }}
 jobs:
   run_python_file:
     runs-on: windows-latest
@@ -28,4 +29,4 @@ jobs:
         json: ${{ secrets.GOOGLE_SHEETS_API_KEY }}
     - name: execute python script
       run: |
-        python Python_crawler_main_for_plurk_ver4github.py
+        python Python_crawler_main_for_plurk_ver5.py
