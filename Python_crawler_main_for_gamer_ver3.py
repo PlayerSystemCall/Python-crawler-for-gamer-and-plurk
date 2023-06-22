@@ -11,7 +11,7 @@ from fake_useragent import UserAgent
 from datetime import datetime
 
 load_dotenv()
-Player_SystemCall_gamer_id = os.getenv('PLAYER_SYSTEMCALL_GAMER_ID')
+Player_SystemCall_gamer_id = os.getenv("PLAYER_SYSTEMCALL_GAMER_ID")
 
 #取得起始時間
 start_timecall = sub_program.TWtime() #呼叫副程式TWtime()獲取時間
@@ -45,7 +45,7 @@ code_section_2_status, times_2 = "✕", 0
 while code_section_2_status == "✕" and times_2 < 3:
     try:
         #取得巴哈小屋網頁原始碼，找到資料的的html區塊，取出資料
-        gamer_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(Player_SystemCall_gamer_id) #巴哈小屋網址，雲端版本
+        gamer_url = "https://home.gamer.com.tw/homeindex.php?owner={}".format(Player_SystemCall_gamer_id) #巴哈小屋網址
         gamer_statuscode = sub_program.go_to_web(gamer_url) #回傳網路狀態碼
         headers = {"User-Agent" : UserAgent().random} #設置http頭欄位，裡面夾帶瀏覽器識別標籤
         Go_to_gamer = requests.get(gamer_url, headers = headers, timeout = 60, allow_redirects = False, stream = True, verify = False) #對gamer_url夾帶headers發出GET請求，timeout為最長反應時間，allow_redirects為禁止重新定向，stream為強制解壓縮，verify為SSL憑證檢查功能       
@@ -215,7 +215,8 @@ while open_googlesheets_status == False and times_open_googlesheets < 3:
     try:
         #開啟試算表
         certificate = pygsheets.authorize(service_file='.\google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
-        googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
+        #googlesheets_url = os.getenv("GOOGLESHEETS_URL") #有spreadsheetId的google sheets網址
+        googlesheets_url = "https://docs.google.com/spreadsheets/d/1xY87Q_54aG1rhazkpiDnqWePhmbznXcVwYEUXRj0pH4" #有spreadsheetId的google sheets網址
         open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
         open_googlesheets_status = True
     except:
@@ -512,8 +513,8 @@ if open_googlesheets_status == True:
                     except:
                         del gamer_data_new["friend"][gamer_friend_number_new] #如果從巴哈取得的朋友account的值沒有在串列裡，刪除以gamer_friend_number_new為名的鍵
                 
-                for i in range(3, (max(gamer_follower_number_last, gamer_friend_number_last)+4)):
-                    worksheet.update_values("B{}".format(i), [["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
+                for l in range(3, (max(gamer_follower_number_last, gamer_friend_number_last)+4)):
+                    worksheet.update_values("B{}".format(l), [["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
                 
                 for gamer_follower_number in range(len(gamer_data_new["follower"])): #範圍為fan鍵的值(字典)內所含有的數量
                     worksheet.update_value("B{}".format(gamer_follower_number+3), gamer_data_new["follower"][gamer_follower_number]["account"]) #寫入追蹤者帳號
@@ -523,7 +524,7 @@ if open_googlesheets_status == True:
                     worksheet.update_value("F{}".format(gamer_follower_number+3), gamer_data_new["follower"][gamer_follower_number]["startfollowdate"]) #寫入開始追蹤日期
                     worksheet.update_value("G{}".format(gamer_follower_number+3), gamer_data_new["follower"][gamer_follower_number]["followday"]) #寫入追蹤天數
                     worksheet.update_value("H{}".format(gamer_follower_number+3), gamer_data_new["follower"][gamer_follower_number]["endfollowdate"]) #寫入結束追蹤日期
-                
+                    
                 for gamer_friend_number in range(len(gamer_data_new["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
                     worksheet.update_value("I{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["account"]) #寫入朋友帳號
                     worksheet.update_value("J{}".format(gamer_friend_number+3), gamer_data_new["friend"][gamer_friend_number]["nickname"]) #寫入朋友帳號

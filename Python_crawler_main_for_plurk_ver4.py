@@ -12,7 +12,7 @@ from fake_useragent import UserAgent
 from datetime import datetime
 
 load_dotenv()
-Player_SystemCall_plurk_id = os.getenv('PLAYER_SYSTEMCALL_PLURK_ID')
+Player_SystemCall_plurk_id = os.getenv("PLAYER_SYSTEMCALL_PLURK_ID")
 
 #取得起始時間
 start_timecall = sub_program.TWtime() #呼叫副程式TWtime()獲取時間
@@ -186,7 +186,8 @@ while open_googlesheets_status == False and times_open_googlesheets < 3:
     try:
         #開啟試算表
         certificate = pygsheets.authorize(service_file='.\google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
-        googlesheets_url = "https://docs.google.com/spreadsheets/d/1vLopfsKHRNaS02bI5AmKHsBbbqtL4EbY4k47SRivMSY" #有spreadsheetId的google sheets網址
+        #googlesheets_url = os.getenv("GOOGLESHEETS_URL") #有spreadsheetId的google sheets網址
+        googlesheets_url = "https://docs.google.com/spreadsheets/d/1xY87Q_54aG1rhazkpiDnqWePhmbznXcVwYEUXRj0pH4" #有spreadsheetId的google sheets網址
         open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
         open_googlesheets_status = True
     except:
@@ -293,11 +294,11 @@ if open_googlesheets_status == True:
                             start_point = 3
                             while worksheet.get_value("J{}".format(start_point)) == "✕": #一直運作直到得到的字串為「完全空白」
                                 start_point = start_point+1
-                            if start_point < 10 and int(date_yesterday.split("月")[0]) == 12:
+                            if start_point < 11 and int(date_yesterday.split("月")[0]) == 12:
                                 worksheet.update_values("N11", [["本季總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本季日平均"], ["=AVERAGE(F{}:F{})".format(start_point, plurk_writesit)]])
-                            elif start_point < 10 and int(date_yesterday.split("月")[0]) == 6:
+                            elif start_point < 11 and int(date_yesterday.split("月")[0]) == 6:
                                 worksheet.update_values("N7", [["本季總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本季日平均"], ["=AVERAGE(F{}:F{})".format(start_point, plurk_writesit)]])
-                            elif start_point < 10 and (int(date_yesterday.split("月")[0]) in [3, 9]):
+                            elif start_point < 11 and (int(date_yesterday.split("月")[0]) in [3, 9]):
                                 worksheet.update_values("N3", [["本季總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本季日平均"], ["=AVERAGE(F{}:F{})".format(start_point, plurk_writesit)]])
                             else:
                                 worksheet.update_values("N{}".format(plurk_writesit-7), [["本季總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本季日平均"], ["=AVERAGE(F{}:F{})".format(start_point, plurk_writesit)]])
@@ -307,13 +308,13 @@ if open_googlesheets_status == True:
                         start_point = 3
                         while worksheet.get_value("J{}".format(start_point)) == "✕": #一直運作直到得到的字串為「完全空白」
                             start_point = start_point+1
-                        if start_point < 6 and int(date_yesterday.split("月")[0]) == 12:
+                        if start_point < 7 and int(date_yesterday.split("月")[0]) == 12:
                             worksheet.update_values("N15", [["本月總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本月日平均"], ["=AVERAGE(L{}:L{})".format(start_point, plurk_writesit)]]) #寫入本月總和和日平均
-                        elif start_point < 6 and int(date_yesterday.split("月")[0]) == 6:
+                        elif start_point < 7 and int(date_yesterday.split("月")[0]) == 6:
                             worksheet.update_values("N11", [["本月總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本月日平均"], ["=AVERAGE(L{}:L{})".format(start_point, plurk_writesit)]])
-                        elif start_point < 6 and (int(date_yesterday.split("月")[0]) in [3, 9]):
+                        elif start_point < 7 and (int(date_yesterday.split("月")[0]) in [3, 9]):
                             worksheet.update_values("N7", [["本月總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本月日平均"], ["=AVERAGE(L{}:L{})".format(start_point, plurk_writesit)]])
-                        elif start_point < 6 and (int(date_yesterday.split("月")[0]) in [1, 2, 4, 5, 7, 8, 10, 11]):
+                        elif start_point < 7 and (int(date_yesterday.split("月")[0]) in [1, 2, 4, 5, 7, 8, 10, 11]):
                             worksheet.update_values("N3", [["本月總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本月日平均"], ["=AVERAGE(L{}:L{})".format(start_point, plurk_writesit)]])
                         else:
                             worksheet.update_values("N{}".format(plurk_writesit-3), [["本月總和"], ["=SUM($L{}:$L{})".format(start_point, plurk_writesit)], ["本月日平均"], ["=AVERAGE(L{}:L{})".format(start_point, plurk_writesit)]])
@@ -323,7 +324,7 @@ if open_googlesheets_status == True:
             except:
                 code_section_5_status = "✕"
                 time_5 = time_5+1
-        
+            
         code_section_6_status, time_6 = "✕", 0
         while code_section_6_status == "✕" and time_6 < 3:
             try:
@@ -487,8 +488,8 @@ if open_googlesheets_status == True:
                     except:
                         del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
                 
-                for i in range(3, (max(plurk_fan_number_last, plurk_friend_number_last)+4)):
-                    worksheet.update_values("B{}".format(i), [["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
+                for l in range(3, (max(plurk_fan_number_last, plurk_friend_number_last)+4)):
+                    worksheet.update_values("B{}".format(l), [["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
                 
                 for plurk_fan_number in range(len(plurk_data_new["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
                     worksheet.update_value("B{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["account"]) #寫入追蹤者帳號
