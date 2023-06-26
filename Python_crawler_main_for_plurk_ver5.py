@@ -185,7 +185,7 @@ open_googlesheets_status, times_open_googlesheets = False, 0
 while open_googlesheets_status == False and times_open_googlesheets < 3:
     try:
         #開啟試算表
-        certificate = pygsheets.authorize(service_file='.\google_sheets_API_key.json') #取得位置在同層級目錄的Google sheets API憑證
+        certificate = pygsheets.authorize(service_account_env_var = "GOOGLE_SHEETS_API_KEY") #取得位置在同層級目錄的Google sheets API憑證
         googlesheets_url = os.getenv("GOOGLESHEETS_URL") #有spreadsheetId的google sheets網址
         open_googlesheets = certificate.open_by_url(googlesheets_url) #開啟Google sheets
         open_googlesheets_status = True
