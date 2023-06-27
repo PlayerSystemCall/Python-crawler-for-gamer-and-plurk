@@ -1,8 +1,7 @@
 name: get_plurk_data
-
 on:
   schedule:
-    - cron: '00 16 * * *'
+  - cron: '00 16 * * *'
   workflow_dispatch: 
 env: 
   PLAYER_SYSTEMCALL_PLURK_ID: ${{ secrets.PLAYER_SYSTEMCALL_PLURK_ID }}
