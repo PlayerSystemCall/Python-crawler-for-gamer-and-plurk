@@ -6,7 +6,7 @@ ntplib
 psutil
 pygsheet
 python-dotenv
-pytz==
+pytz
 regex
 requests
 requests-oauthlib
