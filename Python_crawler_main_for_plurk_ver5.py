@@ -323,7 +323,7 @@ if open_googlesheets_status == True:
             except:
                 code_section_5_status = "✕"
                 time_5 = time_5+1
-            
+        
         code_section_6A_status, time_6A = "✕", 0
         while code_section_6A_status == "✕" and time_6A < 3:
             try:
@@ -333,37 +333,39 @@ if open_googlesheets_status == True:
                 plurk_data_last= {"fan" : {}, "friend" : {}, "other" : {}} #建立字典，並在裡面建立fan、friena和other3鍵，功能為放置從試算表取得的噗浪前一筆(前天)資料
                     #id為噗浪ID，account為噗浪nick_name噗浪帳號，displayname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"id" : [], "account" : [], "displayname" :[], "regdate" : [], "lastondate" : []
                 
-                plurk_fan_number_last = 0 #下方迴圈的計數
-                plurk_data_last["other"]["plurk_fan_accountlist"] = [] #建立與鍵對應的值，此值為串列，功能為放置account
-                plurk_data_last["other"]["plurk_fan_displaynamelist"] = [] #建立與鍵對應的值，此值為串列，功能為放置displayname
-                while worksheet.get_value("B{}".format(plurk_fan_number_last+3)) != "": #一直運作直到得到的字串為「完全空白」
-                    plurk_data_last["fan"][plurk_fan_number_last] = {} #以plurk_fan_number_last為鍵建立對應的值，此值為字典
-                    plurk_data_last["fan"][plurk_fan_number_last]["account"] = worksheet.get_value("B{}".format(plurk_fan_number_last+3)) #建立鍵，自試算表的指定位置讀取值
-                    plurk_data_last["fan"][plurk_fan_number_last]["displayname"] = worksheet.get_value("C{}".format(plurk_fan_number_last+3))
-                    plurk_data_last["fan"][plurk_fan_number_last]["regdate"] = worksheet.get_value("D{}".format(plurk_fan_number_last+3))
-                    plurk_data_last["fan"][plurk_fan_number_last]["lastondate"] = worksheet.get_value("E{}".format(plurk_fan_number_last+3))
-                    plurk_data_last["fan"][plurk_fan_number_last]["startfollowdate"] = worksheet.get_value("F{}".format(plurk_fan_number_last+3))
-                    plurk_data_last["fan"][plurk_fan_number_last]["followday"] = worksheet.get_value("G{}".format(plurk_fan_number_last+3))
-                    plurk_data_last["fan"][plurk_fan_number_last]["endfollowdate"] = worksheet.get_value("H{}".format(plurk_fan_number_last+3))
-                    plurk_data_last["other"]["plurk_fan_accountlist"].append(plurk_data_last["fan"][plurk_fan_number_last]["account"]) #將account這個鍵的值加入串列
-                    plurk_data_last["other"]["plurk_fan_displaynamelist"].append(plurk_data_last["fan"][plurk_fan_number_last]["displayname"]) #將displayname這個鍵的值加入串列
-                    plurk_fan_number_last = plurk_fan_number_last+1
+                if code_section_3_status == "〇":
+                    plurk_fan_number_last = 0 #下方迴圈的計數
+                    plurk_data_last["other"]["plurk_fan_accountlist"] = [] #建立與鍵對應的值，此值為串列，功能為放置account
+                    plurk_data_last["other"]["plurk_fan_displaynamelist"] = [] #建立與鍵對應的值，此值為串列，功能為放置displayname
+                    while worksheet.get_value("B{}".format(plurk_fan_number_last+3)) != "": #一直運作直到得到的字串為「完全空白」
+                        plurk_data_last["fan"][plurk_fan_number_last] = {} #以plurk_fan_number_last為鍵建立對應的值，此值為字典
+                        plurk_data_last["fan"][plurk_fan_number_last]["account"] = worksheet.get_value("B{}".format(plurk_fan_number_last+3)) #建立鍵，自試算表的指定位置讀取值
+                        plurk_data_last["fan"][plurk_fan_number_last]["displayname"] = worksheet.get_value("C{}".format(plurk_fan_number_last+3))
+                        plurk_data_last["fan"][plurk_fan_number_last]["regdate"] = worksheet.get_value("D{}".format(plurk_fan_number_last+3))
+                        plurk_data_last["fan"][plurk_fan_number_last]["lastondate"] = worksheet.get_value("E{}".format(plurk_fan_number_last+3))
+                        plurk_data_last["fan"][plurk_fan_number_last]["startfollowdate"] = worksheet.get_value("F{}".format(plurk_fan_number_last+3))
+                        plurk_data_last["fan"][plurk_fan_number_last]["followday"] = worksheet.get_value("G{}".format(plurk_fan_number_last+3))
+                        plurk_data_last["fan"][plurk_fan_number_last]["endfollowdate"] = worksheet.get_value("H{}".format(plurk_fan_number_last+3))
+                        plurk_data_last["other"]["plurk_fan_accountlist"].append(plurk_data_last["fan"][plurk_fan_number_last]["account"]) #將account這個鍵的值加入串列
+                        plurk_data_last["other"]["plurk_fan_displaynamelist"].append(plurk_data_last["fan"][plurk_fan_number_last]["displayname"]) #將displayname這個鍵的值加入串列
+                        plurk_fan_number_last = plurk_fan_number_last+1
                 
-                plurk_friend_number_last = 0 #下方迴圈的計數
-                plurk_data_last["other"]["plurk_friend_accountlist"] = [] #建立與鍵對應的值，此值為串列，功能為放置account
-                plurk_data_last["other"]["plurk_friend_displaynamelist"] = [] #建立與鍵對應的值，此值為串列，功能為放置displayname
-                while worksheet.get_value("I{}".format(plurk_friend_number_last+3)) != "": #一直運作直到得到的字串為「完全空白」
-                    plurk_data_last["friend"][plurk_friend_number_last] = {} #以plurk_friend_number_last為鍵建立對應的值，此值為字典
-                    plurk_data_last["friend"][plurk_friend_number_last]["account"] = worksheet.get_value("I{}".format(plurk_friend_number_last+3)) #建立鍵，自試算表的指定位置讀取值
-                    plurk_data_last["friend"][plurk_friend_number_last]["displayname"] = worksheet.get_value("J{}".format(plurk_friend_number_last+3))
-                    plurk_data_last["friend"][plurk_friend_number_last]["regdate"] = worksheet.get_value("K{}".format(plurk_friend_number_last+3))
-                    plurk_data_last["friend"][plurk_friend_number_last]["lastondate"] = worksheet.get_value("L{}".format(plurk_friend_number_last+3))
-                    plurk_data_last["friend"][plurk_friend_number_last]["startfollowdate"] = worksheet.get_value("M{}".format(plurk_friend_number_last+3))
-                    plurk_data_last["friend"][plurk_friend_number_last]["followday"] = worksheet.get_value("N{}".format(plurk_friend_number_last+3))
-                    plurk_data_last["friend"][plurk_friend_number_last]["endfollowdate"] = worksheet.get_value("O{}".format(plurk_friend_number_last+3))
-                    plurk_data_last["other"]["plurk_friend_accountlist"].append(plurk_data_last["friend"][plurk_friend_number_last]["account"]) #將account這個鍵的值加入串列
-                    plurk_data_last["other"]["plurk_friend_displaynamelist"].append(plurk_data_last["friend"][plurk_friend_number_last]["displayname"]) #將displayname這個鍵的值加入串列
-                    plurk_friend_number_last = plurk_friend_number_last+1
+                if code_section_4_status == "〇":
+                    plurk_friend_number_last = 0 #下方迴圈的計數
+                    plurk_data_last["other"]["plurk_friend_accountlist"] = [] #建立與鍵對應的值，此值為串列，功能為放置account
+                    plurk_data_last["other"]["plurk_friend_displaynamelist"] = [] #建立與鍵對應的值，此值為串列，功能為放置displayname
+                    while worksheet.get_value("I{}".format(plurk_friend_number_last+3)) != "": #一直運作直到得到的字串為「完全空白」
+                        plurk_data_last["friend"][plurk_friend_number_last] = {} #以plurk_friend_number_last為鍵建立對應的值，此值為字典
+                        plurk_data_last["friend"][plurk_friend_number_last]["account"] = worksheet.get_value("I{}".format(plurk_friend_number_last+3)) #建立鍵，自試算表的指定位置讀取值
+                        plurk_data_last["friend"][plurk_friend_number_last]["displayname"] = worksheet.get_value("J{}".format(plurk_friend_number_last+3))
+                        plurk_data_last["friend"][plurk_friend_number_last]["regdate"] = worksheet.get_value("K{}".format(plurk_friend_number_last+3))
+                        plurk_data_last["friend"][plurk_friend_number_last]["lastondate"] = worksheet.get_value("L{}".format(plurk_friend_number_last+3))
+                        plurk_data_last["friend"][plurk_friend_number_last]["startfollowdate"] = worksheet.get_value("M{}".format(plurk_friend_number_last+3))
+                        plurk_data_last["friend"][plurk_friend_number_last]["followday"] = worksheet.get_value("N{}".format(plurk_friend_number_last+3))
+                        plurk_data_last["friend"][plurk_friend_number_last]["endfollowdate"] = worksheet.get_value("O{}".format(plurk_friend_number_last+3))
+                        plurk_data_last["other"]["plurk_friend_accountlist"].append(plurk_data_last["friend"][plurk_friend_number_last]["account"]) #將account這個鍵的值加入串列
+                        plurk_data_last["other"]["plurk_friend_displaynamelist"].append(plurk_data_last["friend"][plurk_friend_number_last]["displayname"]) #將displayname這個鍵的值加入串列
+                        plurk_friend_number_last = plurk_friend_number_last+1
                 code_section_6A_status = "〇"
             except:
                 code_section_6A_status = "✕"
@@ -375,124 +377,126 @@ if open_googlesheets_status == True:
                 plurk_data_new = {"fan" : {}, "friend" : {}} #建立字典，並在裡面建立fan、friena和other3鍵，功能為放置經過比對後，今天要寫入試算表的(昨天)資料
                     #id為噗浪ID，account為噗浪nick_name噗浪帳號，displayname為名字，regdate巴哈帳號建立日，lastondate巴哈最後登入日 #"id" : [], "account" : [], "displayname" :[], "regdate" : [], "lastondate" : []
                 
-                plurk_fan_number_new = 0 #下方迴圈的計數
-                plurk_fan_string = "plurk_fan-" #沒有起始日則在表格填上這個字串
-                for i in range(len(plurk_data_get["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
-                    plurk_data_new["fan"][plurk_fan_number_new] = {} #以plurk_fan_number_new為鍵建立對應的值，此值為字典
-                    try:
-                        if plurk_data_get["fan"][i]["account"] in plurk_data_last["other"]["plurk_fan_accountlist"]: #如果從噗浪取得的粉絲account的值有在串列裡
-                            plurk_data_new["fan"][plurk_fan_number_new]["status"] = "old" #標記狀態為old
-                            plurk_data_new["fan"][plurk_fan_number_new]["account"] = plurk_data_get["fan"][i]["account"] #將從噗浪取得的粉絲account、displayname、建立日和最後上線日記錄進plurk_data_new
-                            plurk_data_new["fan"][plurk_fan_number_new]["displayname"] = plurk_data_get["fan"][i]["displayname"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_get["fan"][i]["regdate"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_get["fan"][i]["lastondate"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                            plurk_data_new["fan"][plurk_fan_number_new]["followday"] = sub_program.get_followday(number, start_time, i, plurk_data_new["fan"][plurk_fan_number_new]["status"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
-                            plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = "" #結束時間為空白
-                            plurk_fan_number_new = plurk_fan_number_new+1
-                        else:
-                            del plurk_data_new["fan"][plurk_fan_number_new] #如果從噗浪取得的粉絲account的值沒有在串列裡，刪除以plurk_fan_number_new為名的鍵
-                    except:
-                        del plurk_data_new["fan"][plurk_fan_number_new] #如果從噗浪取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
-                
-                for j in range(len(plurk_data_get["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
-                    plurk_data_new["fan"][plurk_fan_number_new] = {} #以plurk_fan_number_new為鍵建立對應的值，此值為字典
-                    try:
-                        if plurk_data_get["fan"][j]["account"] not in plurk_data_last["other"]["plurk_fan_accountlist"]: #如果從噗浪取得的粉絲account的值沒有在串列裡
-                            plurk_data_new["fan"][plurk_fan_number_new]["status"] = "new" #標記狀態為new
-                            plurk_data_new["fan"][plurk_fan_number_new]["account"] = plurk_data_get["fan"][j]["account"] #將從噗浪取得的粉絲account、displayname、建立日和最後上線日記錄進plurk_data_new
-                            plurk_data_new["fan"][plurk_fan_number_new]["displayname"] = plurk_data_get["fan"][j]["displayname"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_get["fan"][j]["regdate"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_get["fan"][j]["lastondate"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
-                            plurk_data_new["fan"][plurk_fan_number_new]["followday"] = "0日0時0分0秒" #第0天
-                            plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = "" #結束時間為空白
-                            plurk_fan_number_new = plurk_fan_number_new+1
-                        else:
+                if code_section_3_status == "〇":
+                    plurk_fan_number_new = 0 #下方迴圈的計數
+                    plurk_fan_string = "plurk_fan-" #沒有起始日則在表格填上這個字串
+                    for i in range(len(plurk_data_get["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
+                        plurk_data_new["fan"][plurk_fan_number_new] = {} #以plurk_fan_number_new為鍵建立對應的值，此值為字典
+                        try:
+                            if plurk_data_get["fan"][i]["account"] in plurk_data_last["other"]["plurk_fan_accountlist"]: #如果從噗浪取得的粉絲account的值有在串列裡
+                                plurk_data_new["fan"][plurk_fan_number_new]["status"] = "old" #標記狀態為old
+                                plurk_data_new["fan"][plurk_fan_number_new]["account"] = plurk_data_get["fan"][i]["account"] #將從噗浪取得的粉絲account、displayname、建立日和最後上線日記錄進plurk_data_new
+                                plurk_data_new["fan"][plurk_fan_number_new]["displayname"] = plurk_data_get["fan"][i]["displayname"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_get["fan"][i]["regdate"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_get["fan"][i]["lastondate"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
+                                plurk_data_new["fan"][plurk_fan_number_new]["followday"] = sub_program.get_followday(number, start_time, i, plurk_data_new["fan"][plurk_fan_number_new]["status"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                                plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = "" #結束時間為空白
+                                plurk_fan_number_new = plurk_fan_number_new+1
+                            else:
+                                del plurk_data_new["fan"][plurk_fan_number_new] #如果從噗浪取得的粉絲account的值沒有在串列裡，刪除以plurk_fan_number_new為名的鍵
+                        except:
                             del plurk_data_new["fan"][plurk_fan_number_new] #如果從噗浪取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
-                    except:
-                        del plurk_data_new["fan"][plurk_fan_number_new] #如果從噗浪取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
+                    
+                    for j in range(len(plurk_data_get["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
+                        plurk_data_new["fan"][plurk_fan_number_new] = {} #以plurk_fan_number_new為鍵建立對應的值，此值為字典
+                        try:
+                            if plurk_data_get["fan"][j]["account"] not in plurk_data_last["other"]["plurk_fan_accountlist"]: #如果從噗浪取得的粉絲account的值沒有在串列裡
+                                plurk_data_new["fan"][plurk_fan_number_new]["status"] = "new" #標記狀態為new
+                                plurk_data_new["fan"][plurk_fan_number_new]["account"] = plurk_data_get["fan"][j]["account"] #將從噗浪取得的粉絲account、displayname、建立日和最後上線日記錄進plurk_data_new
+                                plurk_data_new["fan"][plurk_fan_number_new]["displayname"] = plurk_data_get["fan"][j]["displayname"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_get["fan"][j]["regdate"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_get["fan"][j]["lastondate"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
+                                plurk_data_new["fan"][plurk_fan_number_new]["followday"] = "0日0時0分0秒" #第0天
+                                plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = "" #結束時間為空白
+                                plurk_fan_number_new = plurk_fan_number_new+1
+                            else:
+                                del plurk_data_new["fan"][plurk_fan_number_new] #如果從噗浪取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
+                        except:
+                            del plurk_data_new["fan"][plurk_fan_number_new] #如果從噗浪取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
+                    
+                    for k in range(len(plurk_data_last["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
+                        plurk_data_new["fan"][plurk_fan_number_new] = {} #以plurk_fan_number_new為鍵建立對應的值，此值為字典
+                        try:
+                            if plurk_data_last["fan"][k]["account"] not in plurk_data_get["other"]["plurk_fan_accountlist"]: #如果從試算表取得的粉絲account的值沒有在串列裡
+                                plurk_data_new["fan"][plurk_fan_number_new]["status"] = "leave" #標記狀態為leave
+                                plurk_data_new["fan"][plurk_fan_number_new]["account"] = plurk_data_last["fan"][k]["account"] #將從噗浪取得的粉絲account、displayname、建立日和最後上線日記錄進plurk_data_new
+                                plurk_data_new["fan"][plurk_fan_number_new]["displayname"] = plurk_data_last["fan"][k]["displayname"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_last["fan"][k]["regdate"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_last["fan"][k]["lastondate"]
+                                plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
+                                if plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["endfollowdate"] == "": #如果日期等於空白
+                                    plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
+                                else: #如果日期不等於空白
+                                    plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
+                                plurk_data_new["fan"][plurk_fan_number_new]["followday"] = sub_program.get_followday(number, start_time, k, plurk_data_new["fan"][plurk_fan_number_new]["status"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                                plurk_fan_number_new = plurk_fan_number_new+1
+                            else:
+                                del plurk_data_new["fan"][plurk_fan_number_new] #如果從試算表取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
+                        except:
+                            del plurk_data_new["fan"][plurk_fan_number_new]
                 
-                for k in range(len(plurk_data_last["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
-                    plurk_data_new["fan"][plurk_fan_number_new] = {} #以plurk_fan_number_new為鍵建立對應的值，此值為字典
-                    try:
-                        if plurk_data_last["fan"][k]["account"] not in plurk_data_get["other"]["plurk_fan_accountlist"]: #如果從試算表取得的粉絲account的值沒有在串列裡
-                            plurk_data_new["fan"][plurk_fan_number_new]["status"] = "leave" #標記狀態為leave
-                            plurk_data_new["fan"][plurk_fan_number_new]["account"] = plurk_data_last["fan"][k]["account"] #將從噗浪取得的粉絲account、displayname、建立日和最後上線日記錄進plurk_data_new
-                            plurk_data_new["fan"][plurk_fan_number_new]["displayname"] = plurk_data_last["fan"][k]["displayname"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["regdate"] = plurk_data_last["fan"][k]["regdate"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["lastondate"] = plurk_data_last["fan"][k]["lastondate"]
-                            plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                            if plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["endfollowdate"] == "": #如果日期等於空白
-                                plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
-                            else: #如果日期不等於空白
-                                plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"] = plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                            plurk_data_new["fan"][plurk_fan_number_new]["followday"] = sub_program.get_followday(number, start_time, k, plurk_data_new["fan"][plurk_fan_number_new]["status"], plurk_data_new["fan"][plurk_fan_number_new]["startfollowdate"], plurk_data_last["fan"][plurk_data_last["other"]["plurk_fan_accountlist"].index(plurk_data_new["fan"][plurk_fan_number_new]["account"])]["followday"], plurk_fan_string, plurk_data_new["fan"][plurk_fan_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
-                            plurk_fan_number_new = plurk_fan_number_new+1
-                        else:
-                            del plurk_data_new["fan"][plurk_fan_number_new] #如果從試算表取得的粉絲account的值有在串列裡，刪除以plurk_fan_number_new為名的鍵
-                    except:
-                        del plurk_data_new["fan"][plurk_fan_number_new]
-                
-                plurk_friend_number_new = 0 #下方迴圈的計數
-                plurk_friend_string = "plurk_friend-" #沒有起始日則在表格填上這個字串
-                for i in range(len(plurk_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
-                    plurk_data_new["friend"][plurk_friend_number_new] = {} #以plurk_friend_number_new為鍵建立對應的值，此值為字典
-                    try:
-                        if plurk_data_get["friend"][i]["account"] in plurk_data_last["other"]["plurk_friend_accountlist"]: #如果從噗浪取得的朋友account的值有在串列裡
-                            plurk_data_new["friend"][plurk_friend_number_new]["status"] = "old" #標記狀態為old
-                            plurk_data_new["friend"][plurk_friend_number_new]["account"] = plurk_data_get["friend"][i]["account"] #將從噗浪取得的朋友account、displayname、建立日和最後上線日記錄進plurk_data_new
-                            plurk_data_new["friend"][plurk_friend_number_new]["displayname"] = plurk_data_get["friend"][i]["displayname"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][i]["regdate"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][i]["lastondate"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                            plurk_data_new["friend"][plurk_friend_number_new]["followday"] = sub_program.get_followday(number, start_time, i, plurk_data_new["friend"][plurk_friend_number_new]["status"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
-                            plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = "" #結束時間為空白
-                            plurk_friend_number_new = plurk_friend_number_new+1
-                        else:
+                if code_section_4_status == "〇":
+                    plurk_friend_number_new = 0 #下方迴圈的計數
+                    plurk_friend_string = "plurk_friend-" #沒有起始日則在表格填上這個字串
+                    for i in range(len(plurk_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
+                        plurk_data_new["friend"][plurk_friend_number_new] = {} #以plurk_friend_number_new為鍵建立對應的值，此值為字典
+                        try:
+                            if plurk_data_get["friend"][i]["account"] in plurk_data_last["other"]["plurk_friend_accountlist"]: #如果從噗浪取得的朋友account的值有在串列裡
+                                plurk_data_new["friend"][plurk_friend_number_new]["status"] = "old" #標記狀態為old
+                                plurk_data_new["friend"][plurk_friend_number_new]["account"] = plurk_data_get["friend"][i]["account"] #將從噗浪取得的朋友account、displayname、建立日和最後上線日記錄進plurk_data_new
+                                plurk_data_new["friend"][plurk_friend_number_new]["displayname"] = plurk_data_get["friend"][i]["displayname"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][i]["regdate"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][i]["lastondate"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
+                                plurk_data_new["friend"][plurk_friend_number_new]["followday"] = sub_program.get_followday(number, start_time, i, plurk_data_new["friend"][plurk_friend_number_new]["status"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, 0, worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                                plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = "" #結束時間為空白
+                                plurk_friend_number_new = plurk_friend_number_new+1
+                            else:
+                                del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
+                        except:
                             del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
-                    except:
-                        del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
-                
-                for j in range(len(plurk_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
-                    plurk_data_new["friend"][plurk_friend_number_new] = {} #以plurk_friend_number_new為鍵建立對應的值，此值為字典
-                    try:
-                        if plurk_data_get["friend"][j]["account"] not in plurk_data_last["other"]["plurk_friend_accountlist"]: #如果從噗浪取得的朋友account的值沒有在串列裡
-                            plurk_data_new["friend"][plurk_friend_number_new]["status"] = "new" #標記狀態為new
-                            plurk_data_new["friend"][plurk_friend_number_new]["account"] = plurk_data_get["friend"][j]["account"] #將從噗浪取得的朋友account、displayname、建立日和最後上線日記錄進plurk_data_new
-                            plurk_data_new["friend"][plurk_friend_number_new]["displayname"] = plurk_data_get["friend"][j]["displayname"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][j]["regdate"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][j]["lastondate"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
-                            plurk_data_new["friend"][plurk_friend_number_new]["followday"] = "0日0時0分0秒" #第0天
-                            plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] =  "" #結束時間為空白
-                            plurk_friend_number_new = plurk_friend_number_new+1
-                        else:
-                            del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的粉絲account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
-                    except:
-                        del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
-                
-                for k in range(len(plurk_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
-                    plurk_data_new["friend"][plurk_friend_number_new] = {} #以plurk_friend_number_new為鍵建立對應的值，此值為字典
-                    try:
-                        if plurk_data_last["friend"][k]["account"] not in plurk_data_get["other"]["plurk_friend_accountlist"]: #如果從試算表取得的朋友account的值沒有在串列裡
-                            plurk_data_new["friend"][plurk_friend_number_new]["status"] = "leave" #標記狀態為leave
-                            plurk_data_new["friend"][plurk_friend_number_new]["account"] = plurk_data_get["friend"][k]["account"] #將從噗浪取得的朋友account、displayname、建立日和最後上線日記錄進plurk_data_new
-                            plurk_data_new["friend"][plurk_friend_number_new]["displayname"] = plurk_data_get["friend"][k]["displayname"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][k]["regdate"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][k]["lastondate"]
-                            plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
-                            
-                            if plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["endfollowdate"] == "": #如果日期等於空白
-                                plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
-                            else: #如果日期不等於空白
-                                plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
-                            plurk_data_new["friend"][plurk_friend_number_new]["followday"] = sub_program.get_followday(number, start_time, k, plurk_data_new["friend"][plurk_friend_number_new]["status"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
-                            plurk_friend_number_new = plurk_friend_number_new+1
-                        else:
+                    
+                    for j in range(len(plurk_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
+                        plurk_data_new["friend"][plurk_friend_number_new] = {} #以plurk_friend_number_new為鍵建立對應的值，此值為字典
+                        try:
+                            if plurk_data_get["friend"][j]["account"] not in plurk_data_last["other"]["plurk_friend_accountlist"]: #如果從噗浪取得的朋友account的值沒有在串列裡
+                                plurk_data_new["friend"][plurk_friend_number_new]["status"] = "new" #標記狀態為new
+                                plurk_data_new["friend"][plurk_friend_number_new]["account"] = plurk_data_get["friend"][j]["account"] #將從噗浪取得的朋友account、displayname、建立日和最後上線日記錄進plurk_data_new
+                                plurk_data_new["friend"][plurk_friend_number_new]["displayname"] = plurk_data_get["friend"][j]["displayname"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][j]["regdate"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][j]["lastondate"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1)+" 0:00:00" #以昨天為開始追蹤日
+                                plurk_data_new["friend"][plurk_friend_number_new]["followday"] = "0日0時0分0秒" #第0天
+                                plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] =  "" #結束時間為空白
+                                plurk_friend_number_new = plurk_friend_number_new+1
+                            else:
+                                del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的粉絲account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
+                        except:
                             del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
-                    except:
-                        del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
+                    
+                    for k in range(len(plurk_data_get["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
+                        plurk_data_new["friend"][plurk_friend_number_new] = {} #以plurk_friend_number_new為鍵建立對應的值，此值為字典
+                        try:
+                            if plurk_data_last["friend"][k]["account"] not in plurk_data_get["other"]["plurk_friend_accountlist"]: #如果從試算表取得的朋友account的值沒有在串列裡
+                                plurk_data_new["friend"][plurk_friend_number_new]["status"] = "leave" #標記狀態為leave
+                                plurk_data_new["friend"][plurk_friend_number_new]["account"] = plurk_data_get["friend"][k]["account"] #將從噗浪取得的朋友account、displayname、建立日和最後上線日記錄進plurk_data_new
+                                plurk_data_new["friend"][plurk_friend_number_new]["displayname"] = plurk_data_get["friend"][k]["displayname"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["regdate"] = plurk_data_get["friend"][k]["regdate"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["lastondate"] = plurk_data_get["friend"][k]["lastondate"]
+                                plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["startfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得開始追蹤的日期
+                                
+                                if plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["endfollowdate"] == "": #如果日期等於空白
+                                    plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = str(start_time.year)+"-"+str(start_time.month)+"-"+str(int(start_time.day)-1) #登記昨天為結束追蹤的日期
+                                else: #如果日期不等於空白
+                                    plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"] = plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["endfollowdate"] #尋找指定序號後，從前一筆(前天)紀錄取得結束追蹤的日期
+                                plurk_data_new["friend"][plurk_friend_number_new]["followday"] = sub_program.get_followday(number, start_time, k, plurk_data_new["friend"][plurk_friend_number_new]["status"], plurk_data_new["friend"][plurk_friend_number_new]["startfollowdate"], plurk_data_last["friend"][plurk_data_last["other"]["plurk_friend_accountlist"].index(plurk_data_new["friend"][plurk_friend_number_new]["account"])]["followday"], plurk_friend_string, plurk_data_new["friend"][plurk_friend_number_new]["endfollowdate"], worksheet) #傳入副程式number, start_time, i, status, startfollowdate, followday, string, endfollowdate這些參數，取得追蹤天數
+                                plurk_friend_number_new = plurk_friend_number_new+1
+                            else:
+                                del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
+                        except:
+                            del plurk_data_new["friend"][plurk_friend_number_new] #如果從噗浪取得的朋友account的值沒有在串列裡，刪除以plurk_friend_number_new為名的鍵
                 code_section_6B_status = "〇"
             except:
                 code_section_6B_status = "✕"
@@ -501,26 +505,31 @@ if open_googlesheets_status == True:
         code_section_6C_status, time_6C = "✕", 0
         while code_section_6C_status == "✕" and time_6C < 3:
             try:
-                for l in range(3, (max(plurk_fan_number_last, plurk_friend_number_last)+4)):
-                    worksheet.update_values("B{}".format(l), [["", "", "", "", "", "", "", "", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
+                if code_section_3_status == "〇":
+                    for l in range(3, (plurk_fan_number_last+4)):
+                        worksheet.update_values("B{}".format(l), [["", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
+                    
+                    for plurk_fan_number in range(len(plurk_data_new["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
+                        worksheet.update_value("B{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["account"]) #寫入追蹤者帳號
+                        worksheet.update_value("C{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["displayname"]) #寫入追蹤者暱稱
+                        worksheet.update_value("D{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["regdate"]) #寫入註冊日期
+                        worksheet.update_value("E{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["lastondate"]) #寫入上次上站日期
+                        worksheet.update_value("F{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["startfollowdate"]) #寫入開始追蹤日期
+                        worksheet.update_value("G{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["followday"]) #寫入追蹤天數
+                        worksheet.update_value("H{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["endfollowdate"]) #寫入結束追蹤日期
                 
-                for plurk_fan_number in range(len(plurk_data_new["fan"])): #範圍為fan鍵的值(字典)內所含有的數量
-                    worksheet.update_value("B{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["account"]) #寫入追蹤者帳號
-                    worksheet.update_value("C{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["displayname"]) #寫入追蹤者暱稱
-                    worksheet.update_value("D{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["regdate"]) #寫入註冊日期
-                    worksheet.update_value("E{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["lastondate"]) #寫入上次上站日期
-                    worksheet.update_value("F{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["startfollowdate"]) #寫入開始追蹤日期
-                    worksheet.update_value("G{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["followday"]) #寫入追蹤天數
-                    worksheet.update_value("H{}".format(plurk_fan_number+3), plurk_data_new["fan"][plurk_fan_number]["endfollowdate"]) #寫入結束追蹤日期
-                
-                for plurk_friend_number in range(len(plurk_data_new["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
-                    worksheet.update_value("I{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["account"]) #寫入朋友帳號
-                    worksheet.update_value("J{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["displayname"]) #寫入朋友帳號
-                    worksheet.update_value("K{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["regdate"]) #寫入註冊日期
-                    worksheet.update_value("L{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["lastondate"]) #寫入上次上站日期
-                    worksheet.update_value("M{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["startfollowdate"]) #寫入開始追蹤日期
-                    worksheet.update_value("N{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["followday"]) #寫入追蹤天數
-                    worksheet.update_value("O{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["endfollowdate"]) #寫入結束追蹤日期
+                if code_section_4_status == "〇":
+                    for m in range(3, (plurk_friend_number_last+4)):
+                        worksheet.update_values("I{}".format(m), [["", "", "", "", "", "", ""]]) #寫入「完全空白」來清除版面
+                    
+                    for plurk_friend_number in range(len(plurk_data_new["friend"])): #範圍為friend鍵的值(字典)內所含有的數量
+                        worksheet.update_value("I{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["account"]) #寫入朋友帳號
+                        worksheet.update_value("J{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["displayname"]) #寫入朋友帳號
+                        worksheet.update_value("K{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["regdate"]) #寫入註冊日期
+                        worksheet.update_value("L{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["lastondate"]) #寫入上次上站日期
+                        worksheet.update_value("M{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["startfollowdate"]) #寫入開始追蹤日期
+                        worksheet.update_value("N{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["followday"]) #寫入追蹤天數
+                        worksheet.update_value("O{}".format(plurk_friend_number+3), plurk_data_new["friend"][plurk_friend_number]["endfollowdate"]) #寫入結束追蹤日期
                 code_section_6C_status = "〇"
             except:
                 code_section_6C_status = "✕"
