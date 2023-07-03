@@ -200,11 +200,10 @@ if open_googlesheets_status == True:
             #獲取運作天數
             worksheet = open_googlesheets.worksheet('id', 1888051586) #以sheetId定位試算表位置為倒數第2張的"系統訊息"
             number = 0 #天數寫了總共幾格的計數
-            days = [] #總共幾天
-            while worksheet.get_value("B{}".format(number+3)) != "": #一直運作直到得到的字串為「完全空白」
-                days.append(worksheet.get_value("B{}".format(number+3))) #將得到的字串加入days串列
+            days = worksheet.get_col(2)[2:] #將得到的字串加入days串列
+            while days[number] != "": #一直運作直到得到的字串為「完全空白」
                 number = number+1
-            days = list(set(days)) #將days串列中重複的元素變成1個再組成一個新的days串列
+            days = list(set(days))[1:] #將days串列中重複的元素變成1個再組成一個新的days串列
             date_number = len(days) #天數為days元素的數量
             
             try:
@@ -223,7 +222,8 @@ if open_googlesheets_status == True:
                 worksheet = open_googlesheets.worksheet('id', 0) #以sheetId定位試算表位置為第1張的"人氣紀錄表"
                 
                 writesit = 3 #日期被寫下的格數
-                while worksheet.get_value("A{}".format(writesit)) != "": #一直運作直到得到的字串為「完全空白」
+                A = worksheet.get_col(3)[2:]
+                while A[writesit-3] != "": #一直運作直到得到的字串為「完全空白」
                     writesit = writesit+1
                 
                 if writesit > 3 and str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_yesterday+date_yesterday, "%Y年%m月%d日")): #噗浪資料被寫下的格數 #如果最後一天的日期等於「昨天的台北時間」
@@ -585,6 +585,7 @@ if open_googlesheets_status == True:
             except:
                 code_section_7_status = "✕"
                 time_7 = time_7+1
-    worksheet.update_value("O{}".format(number+3), code_section_7_status) #寫入程式運作狀態 #系統訊息寫入
-    worksheet.update_value("H{}".format(number+3), str(sub_program.TWtime()[0]).split(" ")[1].split("+")[0]) #寫入程式執行的時間
-    worksheet.update_value("G{}".format(number+3), str(sub_program.TWtime()[0]-start_time)) #寫入程式結束的時間
+        worksheet= open_googlesheets.worksheet('id', 1888051586)
+        worksheet.update_value("O{}".format(number+3), code_section_7_status) #寫入程式運作狀態 #系統訊息寫入
+        worksheet.update_value("H{}".format(number+3), str(sub_program.TWtime()[0]).split(" ")[1].split("+")[0]) #寫入程式執行的時間
+        worksheet.update_value("G{}".format(number+3), str(sub_program.TWtime()[0]-start_time)) #寫入程式結束的時間
