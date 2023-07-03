@@ -222,8 +222,8 @@ if open_googlesheets_status == True:
                 worksheet = open_googlesheets.worksheet('id', 0) #以sheetId定位試算表位置為第1張的"人氣紀錄表"
                 
                 writesit = 3 #日期被寫下的格數
-                A = worksheet.get_col(3)[2:]
-                while A[writesit-3] != "": #一直運作直到得到的字串為「完全空白」
+                A_col = worksheet.get_col(3)[2:]
+                while A_col[writesit-3] != "": #一直運作直到得到的字串為「完全空白」
                     writesit = writesit+1
                 
                 if writesit > 3 and str(datetime.strptime(worksheet.get_value("A{}".format(writesit-1))+worksheet.get_value("C{}".format(writesit-1)), "%Y年%m月%d日")) == str(datetime.strptime(ad_year_yesterday+date_yesterday, "%Y年%m月%d日")): #噗浪資料被寫下的格數 #如果最後一天的日期等於「昨天的台北時間」
