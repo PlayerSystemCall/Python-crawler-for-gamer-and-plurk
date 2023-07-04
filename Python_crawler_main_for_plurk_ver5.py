@@ -222,7 +222,7 @@ if open_googlesheets_status == True:
                 worksheet = open_googlesheets.worksheet('id', 0) #以sheetId定位試算表位置為第1張的"人氣紀錄表"
                 
                 writesit = 3 #日期被寫下的格數
-                A_col = worksheet.get_col(3)[2:]
+                A_col = worksheet.get_col(1)[2:]
                 while A_col[writesit-3] != "": #一直運作直到得到的字串為「完全空白」
                     writesit = writesit+1
                 
